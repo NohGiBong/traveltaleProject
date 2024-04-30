@@ -184,7 +184,7 @@
                 android:id="@+id/mypage_logout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/border_horizental"
+                android:background="@drawable/border_horizontal"
                 android:layout_below="@id/mypage_privacy"
                 android:layout_centerVertical="true">
                 <TextView

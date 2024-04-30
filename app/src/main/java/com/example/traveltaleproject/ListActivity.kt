@@ -1,4 +1,4 @@
-package com.example.traveltale
+package com.example.traveltaleproject
 
 class ListActivity {
 }

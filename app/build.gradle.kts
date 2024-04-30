@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.traveltale"
+    namespace = "com.example.traveltaleproject"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.traveltale"
+        applicationId = "com.example.traveltaleproject"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

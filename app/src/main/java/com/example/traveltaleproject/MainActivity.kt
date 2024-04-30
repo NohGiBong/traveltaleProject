@@ -1,12 +1,10 @@
-package com.example.traveltale
+package com.example.traveltaleproject
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.traveltale.databinding.ActivityMainBinding
+import com.example.traveltaleproject.databinding.ActivityMainBinding
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 

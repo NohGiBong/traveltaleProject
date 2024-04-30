@@ -1,8 +1,8 @@
-package com.example.traveltale
+package com.example.traveltaleproject
 
 import android.text.Editable
 import android.text.TextWatcher
-import com.example.traveltale.databinding.ActivityRegisterBinding
+import com.example.traveltaleproject.databinding.ActivityRegisterBinding
 
 class PhoneTextWatcher(private val binding: ActivityRegisterBinding) : TextWatcher {
     private var isFormatting: Boolean = false

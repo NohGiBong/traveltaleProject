@@ -1,4 +1,4 @@
-package com.example.traveltale
+package com.example.traveltaleproject
 
 import android.content.Context
 import android.content.Intent
@@ -14,9 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-
-import com.example.traveltale.databinding.ActivityRegisterBinding
 import com.example.traveltale.user.Member
+import com.example.traveltaleproject.databinding.ActivityRegisterBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

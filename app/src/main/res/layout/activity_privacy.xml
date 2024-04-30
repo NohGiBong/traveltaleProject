@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_privacy"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToOutline="true"
+    android:background="#F8F8F8"
+    >
+    <!-- 개인정보처리방침 헤더 -->
+    <RelativeLayout
+        android:id="@+id/privacy_header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#899AEB"
+        >
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/delete"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp" />
+        <TextView
+            android:id="@+id/privacy_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="개인정보처리방침"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:gravity="top"
+            android:letterSpacing="0.4"
+            android:fontFamily="@font/inter_font"
+            />
+    </RelativeLayout>
+
+    <!-- 개인정보처리방침 내용 -->
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/privacy_header">
+        <RelativeLayout
+            android:id="@+id/privacy_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

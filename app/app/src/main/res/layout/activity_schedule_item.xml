@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/schedule_recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/schedule_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+        <!-- 시간 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/schedule_time"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            app:cardCornerRadius="15dp"
+            app:cardBackgroundColor="#899AEB"
+            app:cardElevation="0dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="8:00 AM"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:fontFamily="@font/inter_font"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- 할 일 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/schedule_txt"
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            app:cardCornerRadius="15dp"
+            app:cardBackgroundColor="#F3F3F3"
+            app:cardElevation="0dp"
+            android:layout_alignParentRight="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="기상 후 준비시작"
+                    android:textColor="@color/black"
+                    android:textSize="13dp"
+                    android:fontFamily="@font/inter_font"/>
+                <ImageView
+                    android:id="@+id/schedule_del"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/delete"
+                    />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</LinearLayout>

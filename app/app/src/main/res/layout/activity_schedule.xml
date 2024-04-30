@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_chk"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToOutline="true"
+    android:background="#FFFFFF">
+    <!-- 스케줄 페이지 헤더 -->
+    <RelativeLayout
+        android:id="@+id/schedule_header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#899AEB"
+        >
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:text="TRAVELTALE"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="30dp"
+            android:gravity="top"
+            android:fontFamily="@font/inter_font"
+            />
+    </RelativeLayout>
+
+    <!-- 스케줄 페이지 바디 -->
+    <!-- 일정 리스트 레이아웃 -->
+    <RelativeLayout
+        android:id="@+id/schedule_body"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_header"
+        android:layout_centerHorizontal="true">
+        <!-- 여행 제목 -->
+        <TextView
+            android:id="@+id/tale_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            android:text="롯폰기 일루미네이션"
+            android:textSize="20dp"
+            android:gravity="top"
+            android:fontFamily="@font/inter_font"
+            android:textFontWeight="900"
+            />
+        <!-- 여행 일자 -->
+        <RelativeLayout
+            android:id="@+id/tale_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tale_title">
+            <EditText
+                android:id="@+id/date_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tale_date"
+                android:textColor="#A1A1A1"
+                android:textSize="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/inter_font"/>
+            <ImageButton
+                android:id="@+id/date_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/calendar"
+                android:alpha="0.5"
+                android:filter="true"
+                android:layout_toRightOf="@id/date_txt" />
+        </RelativeLayout>
+
+        <!-- 일차 -->
+        <RelativeLayout
+            android:id="@+id/schedule_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/tale_date">
+            <!-- 선택된 일차 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/day_selected"
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="5dp"
+                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="#899AEB">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tale_title">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="1일차"
+                        android:textColor="@color/white"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/inter_font"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <!-- 선택되지 않은 일차 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/day_unselected"
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="#ECECEC"
+                android:layout_toRightOf="@+id/day_selected">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tale_title">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="2일차"
+                        android:textColor="@color/black"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/inter_font"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+
+        <!-- 일정 리스트 -->
+        <RelativeLayout
+            android:id="@+id/schedule_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/schedule_period">
+
+            <!-- checklist 아이템 리사이클러 -->
+            <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+                <!-- 스케줄 아이템 작성 -->
+                <RelativeLayout
+                    android:id="@+id/schedule_item_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_below="@+id/recyclerview">
+                    <!-- 시간 수정 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/schedule_time_edit"
+                        android:layout_width="80dp"
+                        android:layout_height="35dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardBackgroundColor="#899AEB"
+                        app:cardElevation="0dp">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:hint="00:00 AM"
+                                android:background="@android:color/transparent"
+                                android:textColor="@color/white"
+                                android:textSize="13dp"
+                                android:fontFamily="@font/inter_font"/>
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- 할 일 수정 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/schedule_txt_edit"
+                        android:layout_width="250dp"
+                        android:layout_height="35dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardBackgroundColor="#F3F3F3"
+                        app:cardElevation="0dp"
+                        android:layout_alignParentRight="true">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <EditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="15dp"
+                                android:hint="일정을 작성해주세요."
+                                android:background="@android:color/transparent"
+                                android:textColor="@color/black"
+                                android:textSize="13dp"
+                                android:fontFamily="@font/inter_font"/>
+                            <ImageView
+                                android:id="@+id/schedule_del_edit"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="10dp"
+                                android:src="@drawable/delete"
+                                />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <!-- 일정 아이템 추가하기 버튼 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/schedule_item_add"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="15dp"
+                app:cardBackgroundColor="#FFE08A"
+                android:layout_below="@+id/schedule_list">
+                <RelativeLayout
+                    android:id="@+id/submit_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#FFE08A">
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/add_btn"
+                        />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <!-- 하단 네비게이션 바 -->
+    <FrameLayout
+        android:id="@+id/under_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/under_navbar"
+            >
+            <RelativeLayout
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true">
+                <!-- 뒤로 가기 버튼 -->
+                <ImageView
+                    android:id="@+id/back_btn"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/black_arrow_left"
+                    />
+                <!-- 메인페이지(리스트) 이동 버튼 -->
+                <ImageView
+                    android:id="@+id/home_btn"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="132dp"
+                    android:src="@drawable/home_btn"
+                    />
+                <!-- 마이페이지 이동 버튼 -->
+                <ImageView
+                    android:id="@+id/mypage_btn"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/mypage"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Auto layout, variables, and unit scale are not yet supported -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/regi"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8"
+    android:clipToOutline="true">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-2dp"
+        android:background="#899AEB" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/regi_header"
+        android:textAppearance="@style/regi_header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="109dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical">
+
+        <!-- 닉네임 필드 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:gravity="top"
+                android:text="@string/nickname_header"
+                android:textAppearance="@style/nickname_header" />
+
+            <EditText
+                android:id="@+id/regi_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="닉네임을 입력"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <!-- 아이디 필드 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:gravity="top"
+                android:text="@string/id_header"
+                android:textAppearance="@style/id_header" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/regi_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="아이디를 입력"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/regi_chk_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#D9D9D9"
+                    android:text="@string/regi_chk_id"
+                    android:textAppearance="@style/regi_chk_id"
+                    android:textColor="#8E8E8E" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/check_id_fail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/check_id_fail"
+                android:textAppearance="@style/check_fail"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/check_id_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/check_id_success"
+                android:textAppearance="@style/check_success"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+        <!-- 비밀번호 필드 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:gravity="top"
+                android:text="@string/pw_header"
+                android:textAppearance="@style/pw_header" />
+
+            <EditText
+                android:id="@+id/regi_pw"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="비밀번호 입력"
+                android:inputType="textPassword"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/regi_chk_pw"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/check_pw_fail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/check_pw_fail"
+                android:textAppearance="@style/check_fail"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- 이메일 필드 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/some_id"
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:gravity="top"
+                android:text="@string/email_header"
+                android:textAppearance="@style/email_header" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/regi_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="이메일 입력"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="\@"
+                    android:textColor="@color/black" />
+
+
+                <Spinner
+                    android:id="@+id/regi_email_domain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:popupBackground="@color/white"
+                    android:entries="@array/domain"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:gravity="top"
+                android:text="@string/phone_header"
+                android:textAppearance="@style/phone_header" />
+
+            <EditText
+                android:id="@+id/regi_phone"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="휴대폰 번호 입력"
+                android:inputType="phone"
+                android:maxLength="13"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/regi_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#FFE08A"
+            android:text="가입하기"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+    </LinearLayout>
+</RelativeLayout>

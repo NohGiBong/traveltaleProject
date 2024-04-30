@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "828281648089",
+    "firebase_url": "https://my-traveltale-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "my-traveltale",
+    "storage_bucket": "my-traveltale.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828281648089:android:e413acaca00cb0fd659fc8",
+        "android_client_info": {
+          "package_name": "com.example.traveltale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828281648089-ph4lhrqsa6nem1qhtuevu6ilsvpvfocs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.traveltale",
+            "certificate_hash": "ebeb3af292c083d668deaeca869ce66217262462"
+          }
+        },
+        {
+          "client_id": "828281648089-et0433rqkt2pmohu4gtap4hnpds1hmvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKo6trr6fmZoDModyLnjKe0Hsn_7nyIhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828281648089-et0433rqkt2pmohu4gtap4hnpds1hmvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

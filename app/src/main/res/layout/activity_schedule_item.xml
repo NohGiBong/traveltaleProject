@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- 스케줄 아이템 작성 -->
     <RelativeLayout
-        android:id="@+id/schedule_item"
-        android:layout_width="match_parent"
+        android:id="@+id/schedule_item_edit"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <!-- 시간 -->
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/recyclerview">
+        <!-- 시간 수정 -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/schedule_time"
+            android:id="@+id/schedule_time_edit"
             android:layout_width="80dp"
             android:layout_height="35dp"
             app:cardCornerRadius="15dp"
@@ -20,20 +22,22 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+                <EditText
+                    android:id="@+id/input_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="8:00 AM"
+                    android:hint="00:00 AM"
+                    android:background="@android:color/transparent"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:fontFamily="@font/inter_font"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- 할 일 -->
+        <!-- 할 일 수정 -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/schedule_txt"
+            android:id="@+id/schedule_txt_edit"
             android:layout_width="250dp"
             android:layout_height="35dp"
             app:cardCornerRadius="15dp"
@@ -43,17 +47,19 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+                <EditText
+                    android:id="@+id/input_schedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:text="기상 후 준비시작"
+                    android:hint="일정을 작성해주세요."
+                    android:background="@android:color/transparent"
                     android:textColor="@color/black"
                     android:textSize="13dp"
                     android:fontFamily="@font/inter_font"/>
                 <ImageView
-                    android:id="@+id/schedule_del"
+                    android:id="@+id/schedule_del_edit"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentRight="true"

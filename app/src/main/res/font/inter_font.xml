@@ -7,5 +7,10 @@
     <font
         android:fontStyle="normal"
         android:font="@font/inter_bold"
+        android:fontWeight="700" />
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/inter_black"
         android:fontWeight="900" />
 </font-family>

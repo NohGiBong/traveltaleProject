@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.traveltale.user.Member
+import com.example.traveltaleproject.user.Member
 import com.example.traveltaleproject.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

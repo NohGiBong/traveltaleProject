@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="fail">#FF0000</color>
     <color name="success">#1DDB16</color>
+
+    <color name="selected">#8A9AE7</color>
+    <color name="unselected">#ECECEC</color>
 </resources>

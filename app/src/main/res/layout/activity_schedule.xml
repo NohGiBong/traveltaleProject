@@ -79,19 +79,20 @@
         </RelativeLayout>
 
         <!-- 일차 -->
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/schedule_period"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
             android:layout_below="@+id/tale_date">
             <!-- 일차 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/schedule_day_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <!-- 일정 리스트 -->
         <RelativeLayout

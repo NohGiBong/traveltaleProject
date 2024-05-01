@@ -1,35 +1,53 @@
 package com.example.traveltaleproject
 
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.traveltaleproject.R
+import com.example.traveltaleproject.databinding.ActivityScheduleBinding
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ScheduleActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ScheduleItemAdapter
-    private lateinit var cardView: CardView
+    private lateinit var binding: ActivityScheduleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule)
 
-        recyclerView = findViewById(R.id.schedule_item)
-        adapter = ScheduleItemAdapter()
+        binding = ActivityScheduleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        val dateEditText = findViewById<EditText>(R.id.date_txt)
 
-        cardView = findViewById(R.id.schedule_item_add)
-        cardView.setOnClickListener {
-            addItem()
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val picker = builder.build()
+
+        picker.addOnPositiveButtonClickListener {
+            val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
+            val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
+
+            val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
+
+            val startDate = Calendar.getInstance().apply { timeInMillis = startDateInMillis }
+            val endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
+
+            val formattedStartDate = sdf.format(startDate.time)
+            val formattedEndDate = sdf.format(endDate.time)
+
+            dateEditText.setText("$formattedStartDate - $formattedEndDate")
         }
+
+        val datePickerButton = findViewById<ImageButton>(R.id.date_btn)
+        datePickerButton.setOnClickListener {
+            picker.show(supportFragmentManager, picker.toString())
+        }
+
     }
 
-    private fun addItem() {
-        val newItem = "New Item"
-        adapter.addItem(newItem)
-    }
+
+
 }

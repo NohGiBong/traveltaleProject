@@ -18,6 +18,16 @@
         android:layout_alignParentTop="true"
         android:background="#8A9AE7"
         >
+        <!-- 마이페이지 이동 버튼 -->
+        <ImageButton
+            android:id="@+id/user_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/user_btn"/>
+
         <RelativeLayout
             android:layout_width="330dp"
             android:layout_height="wrap_content"

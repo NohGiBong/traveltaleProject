@@ -7,3 +7,4 @@ data class Member(
     val email: String?,
     val phone: String?
 )
+

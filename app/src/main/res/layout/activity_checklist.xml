@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tale_title">
-            <EditText
+            <TextView
                 android:id="@+id/date_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,58 +108,14 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 체크리스트 item 추가 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/checklist_item_edit"
-                android:layout_width="330dp"
-                android:layout_height="40dp"
-                android:layout_below="@id/checklist_add"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#BDEFEFEF"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
-                >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/chk_img_edit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:src="@drawable/unchecked"/>
-                <EditText
-                    android:id="@+id/chk_txt_edit"
-                    android:layout_width="wrap_content"
+                <!-- checklist 아이템 리사이클러 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/chk_img_edit"
-                    android:background="@android:color/transparent"
-                    android:hint="체크리스트를 입력해주세요"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/inter_font" />
-                <ImageView
-                    android:id="@+id/chk_del_edit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/delete"
-                    />
-            </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- checklist 아이템 리사이클러 -->
-            <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/checklist_item_edit"/>
+                    android:layout_below="@+id/checklist_add" />
         </RelativeLayout>
     </RelativeLayout>
 

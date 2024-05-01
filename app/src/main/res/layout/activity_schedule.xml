@@ -101,7 +101,7 @@
             android:layout_marginBottom="10dp"
             android:layout_below="@id/schedule_period">
 
-            <!-- checklist 아이템 리사이클러 -->
+            <!-- schedule 아이템 리사이클러 -->
             <androidx.recyclerview.widget.RecyclerView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/schedule_item"

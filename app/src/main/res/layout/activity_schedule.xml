@@ -135,48 +135,4 @@
 
     </RelativeLayout>
 
-    <!-- 하단 네비게이션 바 -->
-    <FrameLayout
-        android:id="@+id/under_navbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/under_navbar"
-            >
-            <RelativeLayout
-                android:layout_width="280dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true">
-                <!-- 뒤로 가기 버튼 -->
-                <ImageView
-                    android:id="@+id/back_btn"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_marginTop="12dp"
-                    android:src="@drawable/black_arrow_left"
-                    />
-                <!-- 메인페이지(리스트) 이동 버튼 -->
-                <ImageView
-                    android:id="@+id/home_btn"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="132dp"
-                    android:src="@drawable/home_btn"
-                    />
-                <!-- 마이페이지 이동 버튼 -->
-                <ImageView
-                    android:id="@+id/mypage_btn"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/mypage"
-                    />
-            </RelativeLayout>
-        </RelativeLayout>
-    </FrameLayout>
 </RelativeLayout>

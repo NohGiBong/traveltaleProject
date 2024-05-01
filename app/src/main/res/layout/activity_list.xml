@@ -143,7 +143,7 @@
             android:layout_marginRight="30dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="480dp"
+            android:layout_marginTop="520dp"
             android:elevation="4dp"
             android:src="@drawable/tale_add_btn"
             />

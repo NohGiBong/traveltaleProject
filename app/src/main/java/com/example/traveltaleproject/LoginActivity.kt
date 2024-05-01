@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.user.Member
 import com.example.traveltaleproject.databinding.ActivityLoginBinding
 import com.example.traveltaleproject.user.Member
 import com.google.android.gms.auth.api.Auth
@@ -17,6 +18,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.NaverIdLoginSDK.authenticate
+import com.navercorp.nid.NaverIdLoginSDK.initialize
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
+import org.json.JSONObject
 
 
 class LoginActivity : AppCompatActivity() {

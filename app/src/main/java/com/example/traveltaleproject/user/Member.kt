@@ -1,4 +1,4 @@
-package com.example.traveltale.user
+package com.example.traveltaleproject.user
 
 data class Member(
     val nickname: String?,
@@ -7,3 +7,4 @@ data class Member(
     val email: String?,
     val phone: String?
 )
+

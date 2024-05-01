@@ -1,4 +1,4 @@
-package com.example.traveltale.user
+package com.example.traveltaleproject.user
 
 class MyPage {
 }

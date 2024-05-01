@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/checklist_recyclerview"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    app:cardBackgroundColor="#BDEFEFEF"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="0dp"
+    android:layout_width="330dp"
+    android:layout_height="40dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- 체크리스트 item -->
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/checklist_item_edit"
         android:layout_width="330dp"
         android:layout_height="40dp"
-        android:layout_below="@id/checklist_item_edit"
-        android:layout_marginTop="10dp"
         app:cardBackgroundColor="#BDEFEFEF"
         app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
@@ -18,23 +21,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
-                android:id="@+id/chk_img"
+                android:id="@+id/chk_img_edit"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/checked"/>
-            <TextView
-                android:id="@+id/chk_txt"
+                android:src="@drawable/unchecked"/>
+
+            <EditText
+                android:id="@+id/chk_txt_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/chk_img"
-                android:text="여권"
-                android:fontFamily="@font/inter_font"/>
+                android:layout_toEndOf="@+id/chk_img_edit"
+                android:background="@android:color/transparent"
+                android:hint="체크리스트를 입력해주세요"
+                android:textSize="14dp"
+                android:fontFamily="@font/inter_font" />
+
             <ImageView
-                android:id="@+id/chk_del"
+                android:id="@+id/chk_del_edit"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"

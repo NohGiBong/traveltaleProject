@@ -112,7 +112,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/get_checklist"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="15dp"
                 app:cardElevation="8dp"
@@ -134,7 +134,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/get_schedule"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:layout_marginBottom="15dp"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp"
@@ -155,7 +155,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/get_tale"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp"
                 app:cardBackgroundColor="#FFE08A"

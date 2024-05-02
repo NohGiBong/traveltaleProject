@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Auto layout, variables, and unit scale are not yet supported -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_list"
@@ -18,6 +16,16 @@
         android:layout_alignParentTop="true"
         android:background="#8A9AE7"
         >
+        <!-- 마이페이지 이동 버튼 -->
+        <ImageButton
+            android:id="@+id/user_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/user_btn"/>
+
         <RelativeLayout
             android:layout_width="330dp"
             android:layout_height="wrap_content"
@@ -126,17 +134,18 @@
         </androidx.cardview.widget.CardView>
 
         <!-- 여행 추가하기 -->
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/item_add_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="480dp"
-            android:elevation="4dp"
-            android:src="@drawable/tale_add_btn"
+            android:layout_marginTop="510dp"
+            android:elevation="3dp"
+            app:srcCompat="@drawable/add_btn"
             />
+
     </RelativeLayout>
 
 </RelativeLayout>

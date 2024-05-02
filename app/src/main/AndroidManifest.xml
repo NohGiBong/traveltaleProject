@@ -20,14 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.TraveltaleProject"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>
+
         <activity
             android:name=".LoginActivity"
             android:exported="false">
         </activity>
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false">
@@ -46,6 +49,11 @@
 
         <activity
             android:name=".GetActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".ListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,6 +62,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AddActivity"
+            android:exported="false">
+        </activity>
 
 
     </application>

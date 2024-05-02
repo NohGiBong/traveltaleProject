@@ -1,5 +1,6 @@
 package com.example.traveltaleproject
 
+
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView

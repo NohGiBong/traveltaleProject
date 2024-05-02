@@ -1,87 +1,119 @@
 package com.example.traveltaleproject
 
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.traveltaleproject.databinding.ActivityChecklistItemBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-// 데이터베이스 설정
-private val database = Firebase.database
-private val myRef = database.getReference().child("check")
+class ChecklistAdapter(private val dataList: MutableList<String>) :
+    RecyclerView.Adapter<ChecklistAdapter.ChecklistViewHolder>() {
 
-class ChecklistViewHolder(val binding: ActivityChecklistItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: String) {
-        binding.chkTxtEdit.setText(item)
-
-        // 이미지 클릭 시 unchecked -> checked 바꿈
-        binding.chkImgEdit.setOnClickListener {
-            // 현재 ImageView의 이미지 리소스 가져옴
-            val currentDrawable = binding.chkImgEdit.drawable.constantState
-
-            if (currentDrawable == ContextCompat.getDrawable(
-                    itemView.context,
-                    R.drawable.unchecked
-                )?.constantState
-            ) {
-                binding.chkImgEdit.setImageResource(R.drawable.checked)
-            } else {
-                binding.chkImgEdit.setImageResource(R.drawable.unchecked)
-            }
-        }
-    }
-}
-
-class ChecklistAdapter(val dataList: MutableList<String>?) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int {
-        return dataList?.size ?: 0
+        return dataList.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        ChecklistViewHolder(
-            ActivityChecklistItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChecklistViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.activity_checklist_item, parent, false)
+        return ChecklistViewHolder(view)
+    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding = (holder as ChecklistViewHolder).binding
+    override fun onBindViewHolder(holder: ChecklistViewHolder, position: Int) {
+        holder.bind(dataList[position])
+    }
 
-        binding.chkTxtEdit.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                // Enter 키가 눌렸을 때 새로운 아이템을 추가할 데이터 준비
-                val newItemText = binding.chkTxtEdit.text.toString()
+    inner class ChecklistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val cardView: CardView = view.findViewById(R.id.checklist_item_edit)
+        private val editText: EditText = cardView.findViewById(R.id.chk_txt_edit)
+        private val chkImgEdit: ImageView = cardView.findViewById(R.id.chk_img_edit)
+        private val chkDelEdit: ImageView = cardView.findViewById(R.id.chk_del_edit)
 
-                // 데이터베이스에 새로운 아이템 저장
-                saveNewItemToDatabase(newItemText)
+        var isChecked = false
 
-                // RecyclerView 어댑터에 데이터가 변경되었음을 알림
-                notifyDataSetChanged()
+        init {
+            // chkImgEdit 클릭 시 unchecked -> checked 변경
+            chkImgEdit.setOnClickListener {
+                Log.d("ChecklistAdapter", "Image clicked!")
 
-                return@setOnKeyListener true
+                isChecked = !isChecked // 상태를 변경
+
+                // isChecked에 따라 이미지 변경
+                if (isChecked) {
+                    chkImgEdit.setImageResource(R.drawable.checked)
+                } else {
+                    chkImgEdit.setImageResource(R.drawable.unchecked)
+                }
             }
-            return@setOnKeyListener false
-        }
-    }
 
-    private fun saveNewItemToDatabase(newItemText: String) {
-        // 데이터베이스에 새로운 아이템 저장
-        val newItemKey = myRef.push().key // 새로운 아이템의 고유한 키 생성
-        newItemKey?.let { key ->
-            myRef.child(key).setValue(newItemText)
+            // editText 입력 후 엔터 -> db에 저장
+            editText.setOnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                    // 엔터 키가 입력되었을 때 실행되는 로직
+                    val newItemText = editText.text.toString()
+                    saveNewItemToDatabase(newItemText)
+                    true
+                } else {
+                    false
+                }
+            }
+
+            // chkdeledit 클릭 시 recyclerview와 db 삭제
+            chkDelEdit.setOnClickListener {
+                val snackbar = Snackbar.make(itemView, "정말로 삭제하시겠습니까?", Snackbar.LENGTH_LONG)
+                    .setAction("삭제") {
+                        val position = adapterPosition // 현재 아이템의 위치를 가져옴
+                        if (position != RecyclerView.NO_POSITION) {
+                            if (dataList.isNotEmpty() && position < dataList.size) {
+                                // Firebase Realtime Database에서 아이템 삭제
+                                val database = Firebase.database
+                                val itemId = dataList[position] // dataList에서 해당 위치의 아이템을 가져옴
+                                val itemRef =
+                                    database.getReference("check").child(itemId) // Firebase 경로를 생성함
+                                itemRef.removeValue()
+                                    .addOnSuccessListener {
+                                        println("Item removed from database")
+
+                                        // RecyclerView에서 아이템 제거
+                                        dataList.removeAt(position)
+                                        notifyItemRemoved(position)
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        println("Error removing item from database: $exception")
+                                    }
+                            } else {
+                                Log.e("ChecklistAdapter", "삭제!!!!")
+                            }
+                        }
+                    }
+                snackbar.show()
+            }
+        }
+
+        fun bind(text: String) {
+            editText.setText(text)
+        }
+
+        // Firebase Realtime Database 인스턴스 가져오기
+        val database = Firebase.database
+
+        // 새로운 아이템을 저장하는 함수
+        fun saveNewItemToDatabase(newItemText: String) {
+            // "checklist" 노드에 새로운 아이템 추가
+            val newItemRef = database.getReference("check").push()
+            newItemRef.setValue(newItemText)
                 .addOnSuccessListener {
-                    // 데이터베이스에 성공적으로 저장되면 로그를 출력합니다.
                     println("New item saved to database")
                 }
                 .addOnFailureListener { exception ->
-                    // 저장에 실패하면 오류 메시지를 출력합니다.
                     println("Error saving new item to database: $exception")
                 }
         }

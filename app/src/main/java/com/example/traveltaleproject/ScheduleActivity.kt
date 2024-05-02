@@ -1,9 +1,11 @@
+package com.example.traveltaleproject
+
+import SchduleItemAdapter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.traveltaleproject.R
 
 class ScheduleActivity : AppCompatActivity() {
 

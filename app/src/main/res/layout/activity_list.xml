@@ -141,11 +141,12 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="510dp"
+            android:layout_marginTop="495dp"
             android:elevation="3dp"
             app:srcCompat="@drawable/add_btn"
             />
 
     </RelativeLayout>
-
+    <!-- bottom_navi.xml을 include -->
+    <include layout="@layout/bottom_navigation" />
 </RelativeLayout>

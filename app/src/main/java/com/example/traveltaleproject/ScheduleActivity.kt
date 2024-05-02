@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -22,6 +23,7 @@ class ScheduleActivity : AppCompatActivity() {
     private var differenceInDays: Long? = null
     private lateinit var scheduleList: MutableList<String>
     private lateinit var adapter: ScheduleDayItemAdapter
+    private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,5 +81,12 @@ class ScheduleActivity : AppCompatActivity() {
         datePickerButton.setOnClickListener {
             picker.show(supportFragmentManager, picker.toString())
         }
+
+        // BottomNavigationHelper 초기화
+        bottomNavigationHelper = BottomNavigationHelper(this, this)
+
+        // 네비게이션 뷰의 아이템 선택 리스너 설정
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 }

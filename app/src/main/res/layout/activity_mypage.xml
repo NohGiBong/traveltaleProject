@@ -205,4 +205,7 @@
         </RelativeLayout>
     </ScrollView>
 
+    <!-- bottom_navi.xml을 include -->
+    <include layout="@layout/bottom_navigation" />
+
 </RelativeLayout>

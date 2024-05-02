@@ -6,12 +6,16 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class GetActivity : AppCompatActivity() {
+
+    private lateinit var bottomNavigationHelper: BottomNavigationHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,5 +64,12 @@ class GetActivity : AppCompatActivity() {
             val intent = Intent(this, TaleWriteActivity::class.java)
             startActivity(intent)
         }
+
+        // BottomNavigationHelper 초기화
+        bottomNavigationHelper = BottomNavigationHelper(this, this)
+
+        // 네비게이션 뷰의 아이템 선택 리스너 설정
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 }

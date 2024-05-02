@@ -30,7 +30,6 @@
     </RelativeLayout>
 
     <!-- 스케줄 페이지 바디 -->
-    <!-- 일정 리스트 레이아웃 -->
     <RelativeLayout
         android:id="@+id/schedule_body"
         android:layout_width="330dp"
@@ -94,46 +93,15 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <!-- 일정 리스트 -->
-        <RelativeLayout
-            android:id="@+id/schedule_list"
+        <fragment
+            android:name="com.example.traveltaleproject.ScheduleFragment"
+            android:id="@+id/fragment_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@id/schedule_period">
-
-            <!-- schedule 아이템 리사이클러 -->
-            <androidx.recyclerview.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/schedule_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            </RelativeLayout>
-
-            <!-- 일정 아이템 추가하기 버튼 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/schedule_item_add"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="#FFE08A"
-                android:layout_below="@+id/schedule_list">
-                <RelativeLayout
-                    android:id="@+id/submit_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#FFE08A">
-                    <ImageView
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/add_btn"
-                        />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+            android:layout_below="@id/schedule_period" />
 
     </RelativeLayout>
 
+    <!-- bottom_navi.xml을 include -->
+    <include layout="@layout/bottom_navigation" />
 </RelativeLayout>

@@ -38,7 +38,7 @@
 
         <activity
             android:name=".CheckListActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity android:name=".ScheduleActivity"
             android:exported="true" />
@@ -49,12 +49,8 @@
 
         <activity
             android:name=".GetActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".ListActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,9 +58,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddActivity"
-            android:exported="false">
+        <activity
+            android:name=".ListActivity"
+            android:exported="true">
         </activity>
+
 
 
     </application>

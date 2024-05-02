@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.databinding.ActivityChecklistBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class CheckListActivity : AppCompatActivity() {
     private lateinit var bottomNavigationHelper: BottomNavigationHelper

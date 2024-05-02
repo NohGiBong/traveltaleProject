@@ -1,6 +1,6 @@
 package com.example.traveltaleproject
 
-import SchduleItemAdapter
+
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton

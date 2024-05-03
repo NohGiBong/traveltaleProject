@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -25,7 +26,7 @@ class GetActivity : AppCompatActivity() {
         val binding = ActivityGetBinding.inflate(layoutInflater)
         setContentView(binding.root) // 액티비티의 레이아웃 설정
 
-        val dateEditText = findViewById<EditText>(R.id.date_txt)
+        val dateEditText = findViewById<TextView>(R.id.date_txt)
 
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker = builder.build()

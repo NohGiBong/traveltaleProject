@@ -47,8 +47,16 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("com.google.firebase:firebase-database-ktx:20.3.1")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+
     implementation("com.navercorp.nid:oauth:5.9.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+
+    implementation("com.kakao.sdk:v2-all:2.20.1")
+    implementation("com.kakao.sdk:v2-user:2.20.1")
+
+    implementation("com.android.volley:volley:1.2.1")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

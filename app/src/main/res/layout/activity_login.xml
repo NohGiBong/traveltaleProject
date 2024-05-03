@@ -209,7 +209,7 @@
             android:background="@drawable/googlebtn"
             />
 
-        <com.navercorp.nid.oauth.view.NidOAuthLoginButton
+        <ImageButton
             android:id="@+id/login_naver"
             android:layout_width="40dp"
             android:layout_height="40dp"

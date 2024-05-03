@@ -41,6 +41,7 @@
     <!--login google-->
     <string name="default_web_client_id">OAuth client-id</string>
 
+
     <!-- mypage -->
     <string name="nickname">Jessi</string>
 
@@ -141,4 +142,9 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="kakao_app_key">9a3023c46872f7bbb18568a2efdd411f</string>
+    <string name="naver_client_id">TmhpRvB9Sbmpp7gVBk4B</string>
+    <string name="naver_client_secret">HTE04sPRKL</string>
+    <string name="naver_client_name">traveltale</string>
+
 </resources>

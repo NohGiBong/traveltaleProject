@@ -20,14 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.TraveltaleProject"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>
+
         <activity
             android:name=".LoginActivity"
             android:exported="false">
         </activity>
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false">
@@ -35,7 +38,7 @@
 
         <activity
             android:name=".CheckListActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity android:name=".ScheduleActivity"
             android:exported="true" />
@@ -47,11 +50,17 @@
         <activity
             android:name=".GetActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ListActivity"
+            android:exported="true">
         </activity>
 
 

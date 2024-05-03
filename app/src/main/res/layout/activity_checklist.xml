@@ -117,6 +117,9 @@
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/checklist_add" />
         </RelativeLayout>
+
     </RelativeLayout>
 
+    <!-- bottom_navi.xml을 include -->
+    <include layout="@layout/bottom_navigation" />
 </RelativeLayout>

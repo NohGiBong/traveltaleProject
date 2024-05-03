@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Auto layout, variables, and unit scale are not yet supported -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_list"
@@ -136,17 +134,19 @@
         </androidx.cardview.widget.CardView>
 
         <!-- 여행 추가하기 -->
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/item_add_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="480dp"
-            android:elevation="4dp"
-            android:src="@drawable/tale_add_btn"
+            android:layout_marginTop="495dp"
+            android:elevation="3dp"
+            app:srcCompat="@drawable/add_btn"
             />
-    </RelativeLayout>
 
+    </RelativeLayout>
+    <!-- bottom_navi.xml을 include -->
+    <include layout="@layout/bottom_navigation" />
 </RelativeLayout>

@@ -46,6 +46,14 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".GetActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".CheckListActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>

@@ -20,8 +20,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginTop="-76dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/jiho" />
+            android:scaleType="centerCrop" />
     </RelativeLayout>
 
     <!-- 상세보기 -->

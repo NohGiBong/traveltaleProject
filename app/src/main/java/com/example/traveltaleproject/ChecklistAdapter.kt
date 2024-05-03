@@ -34,6 +34,7 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
 
     inner class ChecklistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val checkListItem: RelativeLayout = view.findViewById(R.id.checklist_item)
+        private val checkListItemEdit:CardView = checkListItem.findViewById(R.id.checklist_item_edit)
         private val editText: EditText = checkListItem.findViewById(R.id.chk_txt_edit)
         private val chkImgEdit: ImageView = checkListItem.findViewById(R.id.chk_img_edit)
         private val chkDelEdit: ImageView = checkListItem.findViewById(R.id.chk_del_edit)

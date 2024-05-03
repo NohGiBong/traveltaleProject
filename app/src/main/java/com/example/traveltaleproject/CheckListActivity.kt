@@ -1,7 +1,6 @@
 package com.example.traveltaleproject
 
 import android.os.Bundle
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,31 +20,6 @@ class CheckListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityChecklistBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val dateEditText = findViewById<TextView>(R.id.date_text)
-
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        val picker = builder.build()
-
-        picker.addOnPositiveButtonClickListener {
-            val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
-            val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
-
-            val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
-
-            val startDate = Calendar.getInstance().apply { timeInMillis = startDateInMillis }
-            val endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
-
-            val formattedStartDate = sdf.format(startDate.time)
-            val formattedEndDate = sdf.format(endDate.time)
-
-            dateEditText.setText("$formattedStartDate - $formattedEndDate")
-        }
-
-        val datePickerButton = findViewById<ImageButton>(R.id.date_btn)
-        datePickerButton.setOnClickListener {
-            picker.show(supportFragmentManager, picker.toString())
-        }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)

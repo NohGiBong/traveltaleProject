@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.LoginActivity
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityMypageBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -28,6 +30,7 @@ class MyPageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMypageBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +65,13 @@ class MyPageActivity : AppCompatActivity() {
             intent.putExtra("user_id", userId)
             startActivity(intent)
         }
+
+        // BottomNavigationHelper 초기화
+        bottomNavigationHelper = BottomNavigationHelper(this, this)
+
+        // 네비게이션 뷰의 아이템 선택 리스너 설정
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 
     private fun confirmLogout() {

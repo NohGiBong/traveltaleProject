@@ -37,12 +37,17 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
         private val chkImgEdit: ImageView = cardView.findViewById(R.id.chk_img_edit)
         private val chkDelEdit: ImageView = cardView.findViewById(R.id.chk_del_edit)
 
+        // 체크 이미지 변경
         var isChecked = false
+
+        // 수정
+        var isEditMode = false
+
 
         init {
             // chkImgEdit 클릭 시 unchecked -> checked 변경
             chkImgEdit.setOnClickListener {
-                Log.d("ChecklistAdapter", "Image clicked!")
+                Log.d("ChecklistAdapter", "체크 이미지 클릭 !")
 
                 isChecked = !isChecked // 상태를 변경
 
@@ -66,31 +71,49 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
                 }
             }
 
+            // 수정
+            editText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && !isEditMode) {
+                    enterEditMode()
+                }
+            }
+
+            editText.setOnEditorActionListener {  _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                    exitEditMode()
+                    true
+                } else {
+                    false
+                }
+
+            }
+
+
             // chkdeledit 클릭 시 recyclerview와 db 삭제
             chkDelEdit.setOnClickListener {
+                val database = Firebase.database
+                val position = adapterPosition // 현재 아이템의 위치를 가져옴
+
                 val snackbar = Snackbar.make(itemView, "정말로 삭제하시겠습니까?", Snackbar.LENGTH_LONG)
                     .setAction("삭제") {
-                        val position = adapterPosition // 현재 아이템의 위치를 가져옴
                         if (position != RecyclerView.NO_POSITION) {
                             if (dataList.isNotEmpty() && position < dataList.size) {
                                 // Firebase Realtime Database에서 아이템 삭제
-                                val database = Firebase.database
                                 val itemId = dataList[position] // dataList에서 해당 위치의 아이템을 가져옴
-                                val itemRef =
-                                    database.getReference("check").child(itemId) // Firebase 경로를 생성함
+                                val itemRef = database.getReference("check").child(itemId)
                                 itemRef.removeValue()
                                     .addOnSuccessListener {
-                                        println("Item removed from database")
+                                        println("db 삭제 성공")
 
                                         // RecyclerView에서 아이템 제거
                                         dataList.removeAt(position)
                                         notifyItemRemoved(position)
                                     }
                                     .addOnFailureListener { exception ->
-                                        println("Error removing item from database: $exception")
+                                        println("db 삭제 실패 : $exception")
                                     }
                             } else {
-                                Log.e("ChecklistAdapter", "삭제!!!!")
+                                Log.e("ChecklistAdapter", "datalist x")
                             }
                         }
                     }
@@ -116,6 +139,38 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
                 .addOnFailureListener { exception ->
                     println("Error saving new item to database: $exception")
                 }
+        }
+
+        fun enterEditMode() {
+            isEditMode = true
+            editText.requestFocus()
+        }
+
+        fun exitEditMode() {
+            isEditMode = false
+            val newText = editText.text.toString()
+            updateItem(newText)
+        }
+
+        fun updateItem(newText: String) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                // 이전 아이템 키 가져오기
+                val oldItemId = dataList[position]
+                // Firebase Realtime Database에서 해당 아이템의 레퍼런스 가져오기
+                val itemRef = database.getReference("check").child(oldItemId)
+                // 새로운 값을 HashMap으로 저장
+                val updateData = HashMap<String, Any>()
+                updateData["text"] = newText
+                // Firebase Realtime Database에 데이터 업데이트
+                itemRef.updateChildren(updateData)
+                    .addOnSuccessListener {
+                        Log.d("edit", "db 수정 성공")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("edit", "db 수정 실패 : $exception")
+                    }
+            }
         }
     }
 }

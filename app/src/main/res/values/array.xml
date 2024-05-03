@@ -2,7 +2,7 @@
 <resources>
     <string-array name="domain">
         <item>naver.com</item>
-        <item>google.com</item>
+        <item>gmail.com</item>
         <item>nate.com</item>
     </string-array>
 </resources>

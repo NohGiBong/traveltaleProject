@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tale_date"
-                    android:textSize="13dp"
+                    android:textSize="16dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"/>
             </RelativeLayout>
@@ -91,7 +91,7 @@
                     android:id="@+id/map_img"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/map"
                     android:filter="true"
                     />
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="@string/tale_location"
-                    android:textSize="13dp"
+                    android:textSize="15dp"
                     android:layout_toRightOf="@id/map_img"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"

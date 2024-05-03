@@ -3,7 +3,6 @@
     android:id="@+id/checklist_recyclerview"
     android:layout_width="340dp"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
     app:cardBackgroundColor="#BDEFEFEF"
     app:cardCornerRadius="15dp"
     app:cardElevation="0dp"

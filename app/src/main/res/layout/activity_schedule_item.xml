@@ -29,14 +29,19 @@
         </RelativeLayout>
 
         <!-- 할 일 수정 -->
-        <androidx.cardview.widget.CardView
+        <GridLayout
             android:id="@+id/schedule_txt_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/schedule_time"
+            android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/schedule_txt_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15dp"
             app:cardBackgroundColor="#FFB648"
             app:cardElevation="0dp"
-            android:layout_toEndOf="@+id/schedule_time"
             app:cardUseCompatPadding="true"
             app:contentPadding="3dp">
             <RelativeLayout
@@ -65,5 +70,6 @@
                     />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
+        </GridLayout>
     </RelativeLayout>
 </LinearLayout>

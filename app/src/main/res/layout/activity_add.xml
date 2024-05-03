@@ -139,6 +139,8 @@
                     android:backgroundTint="#45B47F" />
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
-    </RelativeLayout>
 
+        <!-- bottom_navi.xml을 include -->
+        <include layout="@layout/bottom_navigation" />
+    </RelativeLayout>
 </RelativeLayout>

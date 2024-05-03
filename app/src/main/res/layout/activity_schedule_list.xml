@@ -4,6 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- 체크리스트 아이템 추가하기 버튼 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/checklist_add"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="15dp">
+
+        <RelativeLayout
+            android:id="@+id/submit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#45B47F">
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/add_icon"
+                />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
     <!-- schedule 아이템 리사이클러 -->
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"

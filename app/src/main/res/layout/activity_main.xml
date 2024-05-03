@@ -29,7 +29,12 @@
         android:textFontWeight="900"
         android:textAlignment="center"
         android:textSize="80dp"
+        android:lineHeight="60dp"
         android:includeFontPadding="false"
+        android:shadowColor="#000000"
+        android:shadowRadius="2"
+        android:shadowDx="2"
+        android:shadowDy="2"
         android:textAppearance="@style/app_name" />
 
     <RelativeLayout
@@ -62,7 +67,8 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="7dp"
                     android:background="@drawable/arrow_start" />
             </RelativeLayout>
 
@@ -75,6 +81,7 @@
                 android:gravity="top"
                 android:text="@string/start_txt"
                 android:fontFamily="@font/kanit_font"
+                android:textFontWeight="700"
                 android:textAppearance="@style/start_txt" />
         </androidx.cardview.widget.CardView>
 

@@ -1,5 +1,7 @@
 package com.example.traveltaleproject
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -21,6 +23,7 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var startDate: Calendar
     private lateinit var endDate: Calendar
     private var differenceInDays: Long? = null
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,13 @@ class ScheduleActivity : AppCompatActivity() {
 
         val binding = ActivityScheduleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // SharedPreferences 초기화
+        sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
+
+        // 사용자 정보 가져오기
+        val userId = sharedPreferences.getString("user_id", "")
+        showToast("$userId")
 
         val recyclerView = findViewById<RecyclerView>(R.id.schedule_day_item)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false) // 수평으로 설정
@@ -97,5 +107,9 @@ class ScheduleActivity : AppCompatActivity() {
     private fun showScheduleLayout() {
         val scheduleLayout = findViewById<LinearLayout>(R.id.scheduleLayout)
         scheduleLayout.visibility = View.VISIBLE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

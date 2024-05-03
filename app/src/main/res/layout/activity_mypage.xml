@@ -59,7 +59,7 @@
 
             <!-- 개인정보 관리 버튼 -->
             <Button
-                android:id="@+id/mypage_btn"
+                android:id="@+id/myinfo_btn"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/mypage_nickname"
@@ -77,10 +77,10 @@
                 android:id="@+id/mypage_travel_btn"
                 android:layout_width="250dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/mypage_btn"
-                android:background="@drawable/mypage_rectangle"
+                android:layout_below="@+id/myinfo_btn"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/mypage_rectangle"
                 >
                 <ImageView
                     android:layout_width="45dp"

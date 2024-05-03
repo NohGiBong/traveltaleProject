@@ -20,51 +20,44 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.TraveltaleProject"
         tools:targetApi="31">
-
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".CheckListActivity"
-            android:exported="true" />
-
-        <activity android:name=".ScheduleActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".TaleWriteActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".GetActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".ListActivity"
+            android:name=".LoginActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".user.MyPageActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".user.MyInfoActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-
-
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao9a3023c46872f7bbb18568a2efdd411f" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

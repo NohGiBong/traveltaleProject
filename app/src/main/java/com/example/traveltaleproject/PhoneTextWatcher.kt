@@ -2,9 +2,11 @@ package com.example.traveltaleproject
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.EditText
+import androidx.viewbinding.ViewBinding
 import com.example.traveltaleproject.databinding.ActivityRegisterBinding
 
-class PhoneTextWatcher(private val binding: ActivityRegisterBinding) : TextWatcher {
+class PhoneTextWatcher(private val binding: ViewBinding) : TextWatcher {
     private var isFormatting: Boolean = false
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -13,8 +15,20 @@ class PhoneTextWatcher(private val binding: ActivityRegisterBinding) : TextWatch
         if (!isFormatting) {
             isFormatting = true
             val formattedText = formatPhoneNumber(s.toString())
-            binding.regiPhone.setText(formattedText)
-            binding.regiPhone.setSelection(formattedText.length)
+
+            // Reflection을 사용하여 필드 이름 동적으로 설정
+            val fieldName = if (binding is ActivityRegisterBinding) "regiPhone" else "myinfoPhone"
+
+            // 해당 필드에 접근하여 EditText를 가져온 후 문자열 설정
+            val editTextField = binding::class.java.getDeclaredField(fieldName).apply {
+                isAccessible = true
+            }
+            val editText = editTextField.get(binding) as EditText
+            editText.setText(formattedText)
+
+            // 커서 위치 설정
+            editText.setSelection(formattedText.length)
+
             isFormatting = false
         }
     }

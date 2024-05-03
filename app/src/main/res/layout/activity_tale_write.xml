@@ -20,23 +20,34 @@
             android:layout_marginTop="20dp">
             <!-- 뒤로 가기 버튼 -->
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="7dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="13dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/white_arrow_left" />
             <!-- 저장하기 버튼 -->
-            <Button
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:background="#00ff0000"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:text="저장"
-                android:fontFamily="@font/inter_font"/>
+                android:layout_marginRight="10dp"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="20dp"
+                android:backgroundTint="#97A2FF">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:text="저장"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/kanit_font"
+                    android:backgroundTint="#97A2FF"/>
+            </androidx.cardview.widget.CardView>
+
+
         </RelativeLayout>
     </RelativeLayout>
 
@@ -49,9 +60,19 @@
         android:background="@drawable/border_radius"
         android:elevation="20dp"
         >
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="20dp"
+            android:backgroundTint="#FFFFFF">
+        </androidx.cardview.widget.CardView>
+
         <!-- 여행 제목 -->
         <RelativeLayout
-            android:layout_width="330dp"
+            android:layout_width="310dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true">
             <EditText
@@ -59,12 +80,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/tale_title"
                 android:textSize="22dp"
                 android:gravity="top"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:textFontWeight="900"
                 />
 
@@ -74,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tale_write_title"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="8dp">
                 <EditText
                     android:id="@+id/date_txt"
                     android:layout_width="wrap_content"
@@ -83,7 +104,7 @@
                     android:textColor="#A1A1A1"
                     android:textSize="13dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/inter_font"/>
+                    android:fontFamily="@font/kanit_font"/>
                 <!-- 일자 수정 버튼 -->
                 <ImageButton
                     android:id="@+id/date_btn"
@@ -124,7 +145,7 @@
                     android:textSize="13dp"
                     android:layout_toRightOf="@id/map_btn"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/inter_font"
+                    android:fontFamily="@font/kanit_font"
                     />
             </RelativeLayout>
 
@@ -136,7 +157,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@android:color/transparent"
                 android:hint="여행에서 즐거웠던 일, 기억에 남는 경험을 기록해주세요."
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:textSize="15dp"/>
         </RelativeLayout>
 
@@ -149,6 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/under_navbar"
+                android:backgroundTint="#FFEDAD"
                 >
                 <RelativeLayout
                     android:layout_width="330dp"

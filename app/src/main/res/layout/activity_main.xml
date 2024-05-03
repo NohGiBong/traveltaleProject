@@ -25,7 +25,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="0dp"
         android:text="@string/app_name"
-        android:fontFamily="@font/inter_font"
+        android:fontFamily="@font/kanit_font"
         android:textFontWeight="900"
         android:textAlignment="center"
         android:textSize="80dp"
@@ -74,7 +74,7 @@
                 android:layout_marginLeft="90dp"
                 android:gravity="top"
                 android:text="@string/start_txt"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:textAppearance="@style/start_txt" />
         </androidx.cardview.widget.CardView>
 

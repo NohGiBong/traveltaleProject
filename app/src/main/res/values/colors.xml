@@ -5,6 +5,13 @@
     <color name="fail">#FF0000</color>
     <color name="success">#1DDB16</color>
 
-    <color name="selected">#8A9AE7</color>
-    <color name="unselected">#ECECEC</color>
+    <color name="selected">#FF7979</color>
+    <color name="unselected">#80F0F0F0</color>
+
+    <color name="first">#D3FFD5E6</color>
+    <color name="second">#D3FFD3B4</color>
+    <color name="third">#D3C3E2FF</color>
+    <color name="forth">#D3B5ECD8</color>
+
+    <color name="add_color">#45B47F</color>
 </resources>

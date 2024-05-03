@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToOutline="true"
-    android:background="#FFFFFF">
+    android:background="#FFF4D9">
     <!-- 체크리스트 헤더 -->
     <RelativeLayout
         android:id="@+id/checklist_header"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#899AEB"
+        android:background="#F99696"
         >
         <TextView
             android:id="@+id/checklist_title"
@@ -20,12 +20,12 @@
             android:layout_marginLeft="40dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
-            android:text="TRAVELTALE"
-            android:textColor="@color/white"
+            android:text="CheckList"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="30dp"
             android:gravity="top"
-            android:fontFamily="@font/inter_font"
+            android:fontFamily="@font/kanit_font"
             />
     </RelativeLayout>
 
@@ -35,75 +35,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/checklist_header"
         android:layout_centerHorizontal="true">
-        <!-- 여행 제목 -->
-        <TextView
-            android:id="@+id/tale_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="롯폰기 일루미네이션"
-            android:textSize="20dp"
-            android:gravity="top"
-            android:fontFamily="@font/inter_font"
-            android:textFontWeight="900"
-            />
-        <!-- 여행 일자 -->
-        <RelativeLayout
-            android:id="@+id/tale_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tale_title">
-            <TextView
-                android:id="@+id/date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tale_date"
-                android:textColor="#A1A1A1"
-                android:textSize="16dp"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_font"/>
-            <ImageButton
-                android:id="@+id/date_btn"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/calendar"
-                android:alpha="0.5"
-                android:filter="true"
-                android:layout_toRightOf="@id/date_text" />
-        </RelativeLayout>
-
         <!-- 체크리스트 -->
         <RelativeLayout
             android:id="@+id/checklist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@id/tale_date">
+            android:layout_marginBottom="10dp">
 
             <!-- 체크리스트 아이템 추가하기 버튼 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/checklist_add"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                app:cardCornerRadius="15dp"
-                app:cardBackgroundColor="#FFE08A">
+                android:layout_height="30dp"
+                app:cardCornerRadius="15dp">
 
                 <RelativeLayout
                     android:id="@+id/submit_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#FFE08A">
+                    android:layout_height="30dp"
+                    android:background="#45B47F">
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/add_btn"
+                        android:background="@drawable/add_icon"
                         />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -17,6 +19,7 @@ class GetActivity : AppCompatActivity() {
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         val binding = ActivityGetBinding.inflate(layoutInflater)

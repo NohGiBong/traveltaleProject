@@ -3,7 +3,7 @@
     android:id="@+id/activity_lo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#899AEB"
+    android:background="#97A2FF"
     android:clipToOutline="true">
 
     <TextView
@@ -14,7 +14,9 @@
         android:layout_marginTop="68dp"
         android:gravity="top"
         android:text="@string/login_app_name"
-        android:textAppearance="@style/login_app_name" />
+        android:textAppearance="@style/login_app_name"
+        android:fontFamily="@font/kanit_font"
+        android:textFontWeight="900"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +26,8 @@
         android:layout_marginTop="130dp"
         android:gravity="top"
         android:text="@string/login_header"
-        android:textAppearance="@style/login_header" />
+        android:textAppearance="@style/login_header"
+        android:fontFamily="@font/kanit_font" />
 
     <RelativeLayout
         android:id="@+id/login_rectangle"
@@ -51,7 +54,8 @@
                 android:layout_marginTop="30dp"
                 android:gravity="top"
                 android:text="@string/login_id_txt"
-                android:textAppearance="@style/login_id_txt" />
+                android:textAppearance="@style/login_id_txt"
+                android:fontFamily="@font/kanit_font"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -66,7 +70,8 @@
                     android:layout_marginEnd="24dp"
                     android:textColor="@color/black"
                     android:background="@drawable/login_input"
-                    android:hint="Enter your ID" />
+                    android:hint="Enter your ID"
+                    android:fontFamily="@font/kanit_font"/>
             </RelativeLayout>
         </LinearLayout>
 
@@ -84,7 +89,8 @@
                 android:layout_marginStart="24dp"
                 android:gravity="top"
                 android:text="@string/login_pw_txt"
-                android:textAppearance="@style/login_pw_txt" />
+                android:textAppearance="@style/login_pw_txt"
+                android:fontFamily="@font/kanit_font"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -100,7 +106,8 @@
                     android:background="@drawable/login_input"
                     android:textColor="@color/black"
                     android:hint="Enter your password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/kanit_font"/>
             </RelativeLayout>
         </LinearLayout>
 
@@ -111,10 +118,11 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="210dp"
             android:layout_marginRight="24dp"
-            android:backgroundTint="#FFE08A"
+            android:backgroundTint="#FFBB54"
             android:text="로그인"
+            android:fontFamily="@font/kanit_font"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,17 +137,18 @@
                 android:layout_marginTop="280dp"
                 android:gravity="top"
                 android:text="@string/login_q"
-                android:textAppearance="@style/login_q" />
+                android:textAppearance="@style/login_q"
+                android:fontFamily="@font/kanit_font"/>
 
             <TextView
                 android:id="@+id/regi_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
                 android:layout_marginTop="280dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="138dp"
                 android:text="@string/regi_txt"
                 android:textAppearance="@style/regi_txt"
+                android:fontFamily="@font/kanit_font"
                 />
         </LinearLayout>
     </RelativeLayout>
@@ -164,7 +173,8 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_toRightOf="@+id/line_left"
-            android:text="소셜로그인" />
+            android:text="소셜로그인"
+            android:fontFamily="@font/kanit_font"/>
         <RelativeLayout
             android:id="@+id/line_right"
             android:layout_width="169dp"

@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToOutline="true"
-    android:background="#FFFFFF">
+    android:background="#FFF4D9">
     <!-- 스케줄 페이지 헤더 -->
     <RelativeLayout
         android:id="@+id/schedule_header"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#899AEB"
+        android:background="#FFBB54"
         >
         <TextView
             android:id="@+id/app_title"
@@ -20,12 +20,12 @@
             android:layout_marginLeft="40dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
-            android:text="TRAVELTALE"
-            android:textColor="@color/white"
+            android:text="Schedule"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="30dp"
             android:gravity="top"
-            android:fontFamily="@font/inter_font"
+            android:fontFamily="@font/kanit_font"
             />
     </RelativeLayout>
 
@@ -36,72 +36,67 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/schedule_header"
         android:layout_centerHorizontal="true">
-        <!-- 여행 제목 -->
-        <TextView
-            android:id="@+id/tale_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            android:text="롯폰기 일루미네이션"
-            android:textSize="20dp"
-            android:gravity="top"
-            android:fontFamily="@font/inter_font"
-            android:textFontWeight="900"
-            />
         <!-- 여행 일자 -->
         <RelativeLayout
             android:id="@+id/tale_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tale_title">
-            <EditText
+            android:layout_marginTop="20dp">
+            <TextView
                 android:id="@+id/date_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tale_date"
-                android:textColor="#A1A1A1"
-                android:textSize="16dp"
+                android:textSize="22dp"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_font"/>
+                android:fontFamily="@font/kanit_font"/>
             <ImageButton
                 android:id="@+id/date_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="6dp"
                 android:background="@drawable/calendar"
                 android:alpha="0.5"
                 android:filter="true"
                 android:layout_toRightOf="@id/date_txt" />
         </RelativeLayout>
 
-        <!-- 일차 -->
+        <!-- 프래그먼트와 리사이클러뷰를 감싸는 레이아웃 -->
         <LinearLayout
-            android:id="@+id/schedule_period"
+            android:id="@+id/scheduleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal"
+            android:visibility="gone"
+            android:orientation="vertical"
             android:layout_below="@+id/tale_date">
-            <!-- 일차 -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/schedule_day_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
-        <fragment
-            android:name="com.example.traveltaleproject.ScheduleFragment"
-            android:id="@+id/fragment_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/schedule_period" />
+            <!-- 일차 -->
+            <LinearLayout
+                android:id="@+id/schedule_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <!-- 일차 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/schedule_day_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <fragment
+                android:name="com.example.traveltaleproject.ScheduleFragment"
+                android:id="@+id/fragment_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/schedule_period" />
+        </LinearLayout>
 
     </RelativeLayout>
 
     <!-- bottom_navi.xml을 include -->
-    <include layout="@layout/bottom_navigation" />
+    <include
+        layout="@layout/bottom_navigation" />
 </RelativeLayout>

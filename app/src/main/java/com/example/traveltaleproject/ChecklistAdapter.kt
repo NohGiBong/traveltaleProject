@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -32,10 +33,10 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
     }
 
     inner class ChecklistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val cardView: CardView = view.findViewById(R.id.checklist_item_edit)
-        private val editText: EditText = cardView.findViewById(R.id.chk_txt_edit)
-        private val chkImgEdit: ImageView = cardView.findViewById(R.id.chk_img_edit)
-        private val chkDelEdit: ImageView = cardView.findViewById(R.id.chk_del_edit)
+        private val checkListItem: RelativeLayout = view.findViewById(R.id.checklist_item)
+        private val editText: EditText = checkListItem.findViewById(R.id.chk_txt_edit)
+        private val chkImgEdit: ImageView = checkListItem.findViewById(R.id.chk_img_edit)
+        private val chkDelEdit: ImageView = checkListItem.findViewById(R.id.chk_del_edit)
 
         var isChecked = false
 

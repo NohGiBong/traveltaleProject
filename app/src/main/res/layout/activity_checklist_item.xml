@@ -9,24 +9,29 @@
     android:layout_height="40dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/checklist_item_edit"
-        android:layout_width="330dp"
-        android:layout_height="40dp"
-        app:cardBackgroundColor="#BDEFEFEF"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
-        >
         <RelativeLayout
+            android:id="@+id/checklist_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/chk_img_edit"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/unchecked"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/checklist_item_edit"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="2dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/chk_img_edit"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/unchecked"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
             <EditText
                 android:id="@+id/chk_txt_edit"
@@ -34,11 +39,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/chk_img_edit"
+                android:layout_toEndOf="@+id/checklist_item_edit"
                 android:background="@android:color/transparent"
                 android:hint="체크리스트를 입력해주세요"
                 android:textSize="14dp"
-                android:fontFamily="@font/inter_font" />
+                android:fontFamily="@font/kanit_font" />
 
             <ImageView
                 android:id="@+id/chk_del_edit"
@@ -50,5 +55,4 @@
                 android:src="@drawable/delete"
                 />
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
 </LinearLayout>

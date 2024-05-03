@@ -45,12 +45,11 @@
 
         <activity
             android:name=".TaleWriteActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".GetActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

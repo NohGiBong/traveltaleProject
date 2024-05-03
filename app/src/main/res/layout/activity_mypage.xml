@@ -24,7 +24,7 @@
             android:textSize="20dp"
             android:gravity="top"
             android:letterSpacing="0.4"
-            android:fontFamily="@font/inter_font"
+            android:fontFamily="@font/kanit_font"
             />
     </RelativeLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_height="100dp"
                 android:background="@drawable/profile"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp" />
+                android:layout_marginTop="70dp" />
             <!-- 사용자 닉네임 -->
             <TextView
                 android:id="@+id/mypage_nickname"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nickname"
                 android:textSize="20dp"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:layout_below="@+id/mypage_profile"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp" />
@@ -68,7 +68,7 @@
                 android:text="개인정보 관리"
                 android:textSize="13dp"
                 android:textColor="#000000"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:minHeight="0dp"
                 android:layout_centerHorizontal="true" />
 
@@ -94,7 +94,7 @@
                     android:layout_alignParentRight="true"
                     android:text="My TravelTale"
                     android:textSize="16dp"
-                    android:fontFamily="@font/inter_font"
+                    android:fontFamily="@font/kanit_font"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="40dp" />
             </RelativeLayout>
@@ -117,7 +117,7 @@
                         android:text="1:1 고객센터"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="40dp"
-                        android:fontFamily="@font/inter_font"/>
+                        android:fontFamily="@font/kanit_font"/>
                     <ImageButton
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -140,7 +140,7 @@
                         android:layout_centerHorizontal="true"
                         android:text="고객센터 1899-1234"
                         android:textFontWeight="900"
-                        android:fontFamily="@font/inter_font"/>
+                        android:fontFamily="@font/kanit_font"/>
                     <TextView
                         android:id="@+id/center_regular_txt"
                         android:layout_width="325dp"
@@ -150,7 +150,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="@string/center"
                         android:textSize="12dp"
-                        android:fontFamily="@font/inter_font"
+                        android:fontFamily="@font/kanit_font"
                         android:layout_below="@id/center_bold_txt"/>
                 </RelativeLayout>
             </RelativeLayout>
@@ -169,7 +169,7 @@
                     android:text="개인정보처리방침"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="40dp"
-                    android:fontFamily="@font/inter_font"/>
+                    android:fontFamily="@font/kanit_font"/>
                 <ImageButton
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -193,7 +193,7 @@
                     android:text="로그아웃"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="40dp"
-                    android:fontFamily="@font/inter_font"/>
+                    android:fontFamily="@font/kanit_font"/>
                 <ImageButton
                     android:layout_width="20dp"
                     android:layout_height="20dp"

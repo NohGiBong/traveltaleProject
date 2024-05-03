@@ -33,22 +33,32 @@
         android:background="@drawable/border_radius"
         android:elevation="20dp"
         >
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="20dp"
+            android:backgroundTint="#FFFFFF">
+        </androidx.cardview.widget.CardView>
         <!-- 여행 제목 -->
         <RelativeLayout
-            android:layout_width="330dp"
+            android:layout_width="310dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true">
+
             <EditText
                 android:id="@+id/tale_get_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/tale_title"
                 android:textSize="22dp"
                 android:gravity="top"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:textFontWeight="900"
                 />
 
@@ -66,7 +76,7 @@
                     android:text="@string/tale_date"
                     android:textSize="13dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/inter_font"/>
+                    android:fontFamily="@font/kanit_font"/>
             </RelativeLayout>
 
             <!-- 위치 -->
@@ -93,7 +103,7 @@
                     android:textSize="13dp"
                     android:layout_toRightOf="@id/map_img"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/inter_font"
+                    android:fontFamily="@font/kanit_font"
                     />
             </RelativeLayout>
 
@@ -104,7 +114,7 @@
                 android:layout_below="@id/tale_get_map"
                 android:layout_marginTop="20dp"
                 android:textSize="15dp"
-                android:fontFamily="@font/inter_font"
+                android:fontFamily="@font/kanit_font"
                 android:text="@string/tale_content"/>
         </RelativeLayout>
 

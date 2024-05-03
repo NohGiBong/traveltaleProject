@@ -1,4 +1,4 @@
-package com.example.traveltaleproject
+package com.example.traveltaleproject.tale
 
 import android.os.Parcel
 import android.os.Parcelable

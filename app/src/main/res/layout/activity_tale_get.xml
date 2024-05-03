@@ -16,6 +16,7 @@
         >
         <!-- 메뉴 버튼 -->
         <ImageButton
+            android:id="@+id/menuBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -109,13 +110,14 @@
 
             <!-- tale 내용 -->
             <TextView
+                android:id="@+id/taleGet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tale_get_map"
                 android:layout_marginTop="20dp"
                 android:textSize="15dp"
                 android:fontFamily="@font/kanit_font"
-                android:text="@string/tale_content"/>
+                android:text=""/>
         </RelativeLayout>
 
         <!-- bottom_navi.xml을 include -->

@@ -54,15 +54,24 @@
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/modal_time_txt">
                 <Spinner
+                    android:id="@+id/start_time_spinner"
                     android:layout_width="120dp"
-                    android:layout_height="20dp" />
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:popupBackground="@color/white"
+                    android:entries="@array/time"
+                    android:spinnerMode="dropdown"/>
                 <Spinner
+                    android:id="@+id/end_time_spinner"
                     android:layout_width="120dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="20dp"
+                    android:padding="0dp"
+                    android:entries="@array/time"
+                    android:spinnerMode="dropdown"/>
             </LinearLayout>
             <TextView
-                android:id="@+id/modal_schedule_txt"
+                android:id="@+id/modal_schedule_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -76,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_below="@id/modal_schedule_txt"
+                android:layout_below="@id/modal_schedule_title"
                 app:cardCornerRadius="8dp"
                 >
                 <EditText

@@ -22,7 +22,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/menu_btn2" />
+            android:background="@drawable/more2" />
     </RelativeLayout>
 
     <!-- tale 바디 부분 -->

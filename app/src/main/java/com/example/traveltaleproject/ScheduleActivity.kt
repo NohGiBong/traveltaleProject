@@ -22,7 +22,6 @@ class ScheduleActivity : AppCompatActivity() {
 
     private lateinit var startDate: Calendar
     private lateinit var endDate: Calendar
-    private var differenceInDays: Long? = null
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
@@ -70,7 +69,7 @@ class ScheduleActivity : AppCompatActivity() {
             val differenceInMillis = endDate.timeInMillis - startDate.timeInMillis
 
             // 밀리초를 일로 변환
-            differenceInDays = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
+            var differenceInDays:Long = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
 
             // 토스트로 기간 출력
             val toast = Toast.makeText(this, differenceInDays.toString(), Toast.LENGTH_SHORT)

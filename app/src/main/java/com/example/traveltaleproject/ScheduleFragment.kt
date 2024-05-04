@@ -1,5 +1,6 @@
 package com.example.traveltaleproject
 
+import CustomModal
 import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ScheduleFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ScheduleItemAdapter
+//    private lateinit var adapter: ScheduleItemAdapter
 
     companion object {
         fun newInstance(selectedDate: String): ScheduleFragment {
@@ -40,18 +41,10 @@ class ScheduleFragment : Fragment() {
         val schedule_add = view.findViewById<RelativeLayout>(R.id.submit_btn)
 
         schedule_add.setOnClickListener {
-            // 모달 다이얼로그의 레이아웃 inflate
-            val view = inflater.inflate(R.layout.activity_schedule_modal, container, false)
-
-            // 모달 다이얼로그 생성
-            val dialog = AlertDialog.Builder(requireContext())
-                .setView(view)
-                .create()
-
-            dialog.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent)
-
-            // 모달 다이얼로그 표시
-            dialog.show()
+            schedule_add.setOnClickListener {
+               val dialog = CustomModal(requireContext())
+                dialog.show()
+            }
         }
 
         // 리사이클러뷰 초기화

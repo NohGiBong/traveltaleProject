@@ -1,75 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/schedule_recyclerview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- 스케줄 아이템 작성 -->
-    <RelativeLayout
-        android:id="@+id/schedule_item_edit"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-        <!-- 시간 수정 -->
-        <RelativeLayout
-            android:id="@+id/schedule_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:id="@+id/time_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:hint="00 AM"
-                android:background="@android:color/transparent"
-                android:textColor="#727272"
-                android:textSize="16dp"
-                android:fontFamily="@font/kanit_font"/>
-        </RelativeLayout>
+    android:columnCount="2">
 
-        <!-- 할 일 수정 -->
-        <GridLayout
-            android:id="@+id/schedule_txt_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/schedule_time"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/schedule_item_time_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/kanit_font"
+        android:hint="00 AM"
+        android:textColor="#727272"
+        android:textSize="16dp" />
+
+    <RelativeLayout
+        android:id="@+id/schedule_item_schedule_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
             android:id="@+id/schedule_txt_cardview"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="15dp"
             app:cardBackgroundColor="#FFB648"
+            app:cardCornerRadius="15dp"
             app:cardElevation="0dp"
             app:cardUseCompatPadding="true"
             app:contentPadding="3dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="5dp">
-                <EditText
-                    android:id="@+id/input_schedule"
+
+                <TextView
+                    android:id="@+id/schedule_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:hint="일정을 작성해주세요."
                     android:background="@android:color/transparent"
+                    android:fontFamily="@font/kanit_font"
+                    android:hint="일정"
                     android:textColor="@color/black"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/kanit_font"/>
-                <ImageView
-                    android:id="@+id/schedule_del_edit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/delete"
-                    />
+                    android:textSize="14dp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
-        </GridLayout>
+
+        <RelativeLayout
+            android:id="@+id/schedule_recyclerview_edit"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="3dp"
+                app:cardBackgroundColor="#4E4E4E81">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageButton
+                        android:id="@+id/chk_item_edit_btn"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="110dp"
+                        android:background="@drawable/edit" />
+                    <ImageButton
+                        android:id="@+id/chk_item_del_btn"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="60dp"
+                        android:layout_toRightOf="@+id/chk_item_edit_btn"
+                        android:background="@drawable/trash" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
     </RelativeLayout>
-</LinearLayout>
+
+</GridLayout>

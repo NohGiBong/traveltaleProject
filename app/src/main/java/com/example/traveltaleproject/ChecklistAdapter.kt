@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.cardview.widget.CardView
@@ -33,11 +34,13 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
     }
 
     inner class ChecklistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val checkListItem: RelativeLayout = view.findViewById(R.id.checklist_item)
-        private val checkListItemEdit:CardView = checkListItem.findViewById(R.id.checklist_item_edit)
+        private val checkListItemWhole:RelativeLayout = view.findViewById(R.id.checklist_item_whole)
+        private val checkListItem: RelativeLayout = checkListItemWhole.findViewById(R.id.checklist_item_item)
         private val editText: EditText = checkListItem.findViewById(R.id.chk_txt_edit)
         private val chkImgEdit: ImageView = checkListItem.findViewById(R.id.chk_img_edit)
-        private val chkDelEdit: ImageView = checkListItem.findViewById(R.id.chk_del_edit)
+        private val moreBtn:ImageButton = checkListItem.findViewById(R.id.more_btn)
+        private val checkListRecyclerViewEdit: RelativeLayout = checkListItemWhole.findViewById(R.id.checklist_recyclerview_edit)
+//        private val chkDelEdit: ImageView = checkListItem.findViewById(R.id.chk_del_edit)
 
         // 체크 이미지 변경
         var isChecked = false
@@ -60,6 +63,31 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
                     chkImgEdit.setImageResource(R.drawable.unchecked)
                 }
             }
+
+            moreBtn.setOnClickListener {
+                if (checkListRecyclerViewEdit.visibility == View.GONE) {
+                    checkListRecyclerViewEdit.visibility = View.VISIBLE
+                    chkImgEdit.isClickable = false
+                    editText.isEnabled = false
+                    moreBtn.isClickable = false
+                } else {
+                    checkListRecyclerViewEdit.visibility = View.GONE
+                    chkImgEdit.isClickable = true
+                    editText.isEnabled = true
+                    moreBtn.isClickable = true
+                }
+            }
+
+            checkListRecyclerViewEdit.setOnClickListener {
+                if (checkListRecyclerViewEdit.visibility == View.VISIBLE) {
+                    checkListRecyclerViewEdit.visibility = View.GONE
+                    chkImgEdit.isClickable = true
+                    editText.isEnabled = true
+                    moreBtn.isClickable = true
+                }
+            }
+
+
 
             // editText 입력 후 엔터 -> db에 저장
             editText.setOnEditorActionListener { _, actionId, event ->
@@ -92,35 +120,35 @@ class ChecklistAdapter(private val dataList: MutableList<String>) :
 
 
             // chkdeledit 클릭 시 recyclerview와 db 삭제
-            chkDelEdit.setOnClickListener {
-                val database = Firebase.database
-                val position = adapterPosition // 현재 아이템의 위치를 가져옴
-
-                val snackbar = Snackbar.make(itemView, "정말로 삭제하시겠습니까?", Snackbar.LENGTH_LONG)
-                    .setAction("삭제") {
-                        if (position != RecyclerView.NO_POSITION) {
-                            if (dataList.isNotEmpty() && position < dataList.size) {
-                                // Firebase Realtime Database에서 아이템 삭제
-                                val itemId = dataList[position] // dataList에서 해당 위치의 아이템을 가져옴
-                                val itemRef = database.getReference("check").child(itemId)
-                                itemRef.removeValue()
-                                    .addOnSuccessListener {
-                                        println("db 삭제 성공")
-
-                                        // RecyclerView에서 아이템 제거
-                                        dataList.removeAt(position)
-                                        notifyItemRemoved(position)
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        println("db 삭제 실패 : $exception")
-                                    }
-                            } else {
-                                Log.e("ChecklistAdapter", "datalist x")
-                            }
-                        }
-                    }
-                snackbar.show()
-            }
+//            chkDelEdit.setOnClickListener {
+//                val database = Firebase.database
+//                val position = adapterPosition // 현재 아이템의 위치를 가져옴
+//
+//                val snackbar = Snackbar.make(itemView, "정말로 삭제하시겠습니까?", Snackbar.LENGTH_LONG)
+//                    .setAction("삭제") {
+//                        if (position != RecyclerView.NO_POSITION) {
+//                            if (dataList.isNotEmpty() && position < dataList.size) {
+//                                // Firebase Realtime Database에서 아이템 삭제
+//                                val itemId = dataList[position] // dataList에서 해당 위치의 아이템을 가져옴
+//                                val itemRef = database.getReference("check").child(itemId)
+//                                itemRef.removeValue()
+//                                    .addOnSuccessListener {
+//                                        println("db 삭제 성공")
+//
+//                                        // RecyclerView에서 아이템 제거
+//                                        dataList.removeAt(position)
+//                                        notifyItemRemoved(position)
+//                                    }
+//                                    .addOnFailureListener { exception ->
+//                                        println("db 삭제 실패 : $exception")
+//                                    }
+//                            } else {
+//                                Log.e("ChecklistAdapter", "datalist x")
+//                            }
+//                        }
+//                    }
+//                snackbar.show()
+//            }
         }
 
         fun bind(text: String) {

@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/checklist_recyclerview"
-    android:layout_width="340dp"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="#BDEFEFEF"
-    app:cardCornerRadius="15dp"
-    app:cardElevation="0dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/checklist_item_whole"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/checklist_recyclerview"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:cardBackgroundColor="#BDEFEFEF"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp">
         <RelativeLayout
-            android:id="@+id/checklist_item"
+            android:id="@+id/checklist_item_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <androidx.cardview.widget.CardView
-                android:id="@+id/checklist_item_edit"
+                android:id="@+id/checklist_chk_edit"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="2dp"
-                >
+                app:cardElevation="2dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -27,30 +31,61 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/unchecked"/>
+                        android:src="@drawable/unchecked" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
-
             <EditText
                 android:id="@+id/chk_txt_edit"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/checklist_item_edit"
-                android:background="@android:color/transparent"
-                android:hint="체크리스트를 입력해주세요"
-                android:textSize="14dp"
-                android:fontFamily="@font/kanit_font" />
-
-            <ImageView
-                android:id="@+id/chk_del_edit"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_toRightOf="@+id/chk_txt_edit"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/delete"
-                />
+                android:layout_toEndOf="@+id/checklist_chk_edit"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/kanit_font"
+                android:hint="체크리스트를 입력해주세요"
+                android:textSize="14dp" />
+            <ImageButton
+                android:id="@+id/more_btn"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/chk_txt_edit"
+                android:background="@drawable/more" />
         </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/checklist_recyclerview_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#4E4E4E81">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/chk_item_edit_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="110dp"
+                    android:background="@drawable/edit" />
+                <ImageButton
+                    android:id="@+id/chk_item_del_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="60dp"
+                    android:layout_toRightOf="@+id/chk_item_edit_btn"
+                    android:background="@drawable/trash" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</RelativeLayout>

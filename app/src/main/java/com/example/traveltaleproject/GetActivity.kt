@@ -14,7 +14,6 @@ import java.util.Calendar
 import java.util.Locale
 
 class GetActivity : AppCompatActivity() {
-
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {

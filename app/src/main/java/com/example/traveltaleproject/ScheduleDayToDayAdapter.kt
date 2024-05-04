@@ -38,7 +38,6 @@ class ScheduleDayToDayAdapter(private var scheduleDayList: MutableList<String>) 
             notifyDataSetChanged()
             // 클릭된 날짜에 해당하는 프래그먼트를 표시
             val selectedDate = scheduleDayList[selectedPosition]
-            showFragmentForDate(selectedDate)
         }
     }
 

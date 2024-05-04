@@ -36,7 +36,7 @@
         <RelativeLayout
             android:id="@+id/mypage_body"
             android:layout_width="match_parent"
-            android:layout_height="700dp">
+            android:layout_height="750dp">
             <!-- 프로필 이미지 -->
             <ImageButton
                 android:id="@+id/mypage_profile"

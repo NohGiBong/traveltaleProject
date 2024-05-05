@@ -6,6 +6,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
+import com.example.traveltaleproject.schedule.ScheduleActivity
 import com.example.traveltaleproject.tale.TaleWriteActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker

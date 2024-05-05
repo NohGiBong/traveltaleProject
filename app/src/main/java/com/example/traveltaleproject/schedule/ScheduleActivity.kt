@@ -1,4 +1,4 @@
-package com.example.traveltaleproject
+package com.example.traveltaleproject.schedule
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.traveltaleproject.BottomNavigationHelper
+import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker

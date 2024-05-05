@@ -1,4 +1,4 @@
-package com.example.traveltaleproject
+package com.example.traveltaleproject.schedule
 
 import CustomModal
 import android.content.Context
@@ -7,12 +7,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.traveltaleproject.R
 
 
 class ScheduleItemAdapter(private val context: Context?, private var dataSet: List<CustomModal.ScheduleData>) :
@@ -52,13 +52,21 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Li
         context?.let { ctx ->
             // 높이에 따라 색상 변경
             if (heightInPixels % 4 == 1) {
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.first))
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context,
+                    R.color.first
+                ))
             } else if (heightInPixels % 4 == 2) {
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.second))
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context,
+                    R.color.second
+                ))
             } else if (heightInPixels % 4 == 3) {
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.third))
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context,
+                    R.color.third
+                ))
             } else if (heightInPixels % 4 == 0) {
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.forth))
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context,
+                    R.color.forth
+                ))
             }
         }
 

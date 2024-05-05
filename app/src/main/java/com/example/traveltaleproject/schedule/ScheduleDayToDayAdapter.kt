@@ -1,4 +1,4 @@
-package com.example.traveltaleproject
+package com.example.traveltaleproject.schedule
 
 import android.graphics.Typeface
 import android.view.LayoutInflater

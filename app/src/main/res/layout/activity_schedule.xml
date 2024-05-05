@@ -35,7 +35,8 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/schedule_header"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp">
         <!-- 여행 일자 -->
         <RelativeLayout
             android:id="@+id/tale_date"

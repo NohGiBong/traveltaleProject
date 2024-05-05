@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
@@ -13,102 +14,90 @@ import androidx.cardview.widget.CardView
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleModalBinding
 
-class CustomModal(context: Context): Dialog(context) {
+class CustomModal(context: Context) : Dialog(context) {
     private lateinit var binding: ActivityScheduleModalBinding
+
+    private var scheduleData: ScheduleData? = null
+
+    fun setScheduleData(scheduleData: ScheduleData) {
+        this.scheduleData = scheduleData
+    }
+
+    fun getScheduleData(): ScheduleData? {
+        return scheduleData
+    }
+
     data class ScheduleData(
-        val startTime: Long?,
-        val endTime: Long?,
+        val startTime: Long,
+        val endTime: Long,
         val scheduleText: String?
     )
-    private var saveButtonClickListener: SaveButtonClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScheduleModalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 배경을 투명하게 설정
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        // 외부 클릭으로 다이얼로그 닫기 허용
         setCanceledOnTouchOutside(true)
-        // 취소 가능 여부 설정
         setCancelable(true)
 
-        // 뷰 요소 초기화
         val startTimeSpinner = binding.startTimeSpinner
         val endTimeSpinner = binding.endTimeSpinner
         val scheduleTxtEdit = binding.modalScheduleEdit
         val submitBtn = binding.scheduleAdd
 
-        // 선택된 시간 변수 초기화
-        var selectedStartTime: Long? = null
-        var selectedEndTime: Long? = null
+        var selectedStartTime: Long = 0
+        var selectedEndTime: Long = 0
 
-        // 시작 시간 스피너 이벤트 처리
         startTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedString = parent?.getItemAtPosition(position) as? String
-                selectedStartTime = if (selectedString != null && selectedString.length >= 2) {
-                    try {
-                        selectedString.substring(0, 2).toLong()
-                    } catch (e: NumberFormatException) {
-                        // 변환 중 오류 발생 시, 기본값이나 null 반환
-                        null
-                    }
-                } else {
-                    null
-                }
+                selectedEndTime = selectedString?.substring(0, 2)?.toLongOrNull() ?: 0
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // 종료 시간 스피너 이벤트 처리
         endTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedString = parent?.getItemAtPosition(position) as? String
-                selectedEndTime = if (selectedString != null && selectedString.length >= 2) {
-                    try {
-                        selectedString.substring(0, 2).toLong()
-                    } catch (e: NumberFormatException) {
-                        // 변환 중 오류 발생 시, 기본값이나 null 반환
-                        null
-                    }
-                } else {
-                    null
-                }
+                selectedEndTime = selectedString?.substring(0, 2)?.toLongOrNull() ?: 0
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // 저장 버튼 클릭 이벤트 처리
         submitBtn.setOnClickListener {
             val scheduleText = scheduleTxtEdit.text.toString()
 
-            if (scheduleText.isNotBlank()) {
-                // 입력된 스케줄이 있는지 확인
+            if (scheduleText.isNotBlank() && selectedStartTime != selectedEndTime) {
                 val scheduleData = ScheduleData(selectedStartTime, selectedEndTime, scheduleText)
-                saveButtonClickListener?.onSaveButtonClicked(scheduleData)
+                this.scheduleData = scheduleData
+                scheduleDataListener?.onScheduleDataReceived(scheduleData)
 
-                val scheduleInfo = "Start Time: $selectedStartTime, End Time: $selectedEndTime, Schedule: $scheduleText"
-                Toast.makeText(context, scheduleInfo, Toast.LENGTH_SHORT).show()
                 dismiss()
-            } else {
-                // 값이 누락되었을 때 에러 표시
+//                Toast.makeText(context, "Start Time: ${scheduleData.startTime}, End Time: ${scheduleData.endTime}, Schedule: ${scheduleData.scheduleText}", Toast.LENGTH_SHORT).show()
+
+            } else if (scheduleText.isBlank()) {
                 val modalScheduleTxtBox = binding.modalScheduleEditCard
-//                modalScheduleTxtBox.setCardBackgroundColor(context.getColor(R.color.error))
+                modalScheduleTxtBox.setCardBackgroundColor(context.getColor(R.color.error))
+                Toast.makeText(context, "Please select start and end time and fill in the schedule", Toast.LENGTH_SHORT).show()
+            } else if (selectedStartTime == selectedEndTime || selectedStartTime >= selectedEndTime) {
+                startTimeSpinner.setBackgroundResource(R.drawable.error_spinner)
+                endTimeSpinner.setBackgroundResource(R.drawable.error_spinner)
             }
         }
     }
 
     // 저장 버튼 클릭 리스너 인터페이스
-    interface SaveButtonClickListener {
-        fun onSaveButtonClicked(scheduleData: ScheduleData)
+    interface ScheduleDataListener {
+        fun onScheduleDataReceived(scheduleData: ScheduleData)
     }
 
-    // 저장 버튼 클릭 리스너 설정 메서드
-    fun setOnSaveButtonClickListener(listener: SaveButtonClickListener) {
-        saveButtonClickListener = listener
+    private var scheduleDataListener: ScheduleDataListener? = null
+
+    fun setScheduleDataListener(listener: ScheduleDataListener) {
+        scheduleDataListener = listener
     }
+
 }
+

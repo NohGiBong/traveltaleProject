@@ -4,6 +4,8 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -11,10 +13,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
 
-
 class ScheduleDayToDayAdapter(private var scheduleDayList: MutableList<String>) : RecyclerView.Adapter<ScheduleDayToDayAdapter.MyViewHolder>() {
 
-    private var selectedPosition = 0
+//    private var selectedPosition = 0
+//    private var fragmentManager: FragmentManager? = null
+
+    private var selectedPosition: String? = null
     private var fragmentManager: FragmentManager? = null
 
     override fun getItemCount(): Int = scheduleDayList.size
@@ -27,17 +31,17 @@ class ScheduleDayToDayAdapter(private var scheduleDayList: MutableList<String>) 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(scheduleDayList[position])
 
-        if (position == selectedPosition) {
+        if (scheduleDayList[position] == selectedPosition) {
             holder.setSelectedStyle()
         } else {
             holder.setDefaultStyle()
         }
 
         holder.itemView.setOnClickListener {
-            selectedPosition = holder.adapterPosition
+            selectedPosition = scheduleDayList[position]
             notifyDataSetChanged()
-            // 클릭된 날짜에 해당하는 프래그먼트를 표시
-            val selectedDate = scheduleDayList[selectedPosition]
+            // 아이템 클릭 이벤트를 액티비티로 전달
+            showFragmentForDate(selectedPosition)
         }
     }
 
@@ -66,13 +70,24 @@ class ScheduleDayToDayAdapter(private var scheduleDayList: MutableList<String>) 
         }
     }
 
-    private fun showFragmentForDate(date: String) {
+    private fun showFragmentForDate(date: String?) {
         fragmentManager?.let { manager ->
+            // 이미 해당 태그를 가진 프래그먼트가 있는지 확인
+            val existingFragment = manager.findFragmentByTag(date)
+            if (existingFragment != null) {
+                // 이미 추가된 경우 아무 작업도 하지 않고 종료
+                return
+            }
+
             val transaction = manager.beginTransaction()
             // ScheduleFragment.newInstance 메서드로 새 프래그먼트를 생성하고 추가합니다.
-            val newFragment = ScheduleFragment.newInstance(date)
-            transaction.replace(R.id.fragment_view, newFragment)
+            val newFragment = ScheduleFragment.newInstance(date.toString())
+            transaction.replace(R.id.fragment_view, newFragment, date)
             transaction.commit()
+
+            // 클릭한 날짜에 해당하는 프래그먼트를 보이도록 설정
+            val fragmentLayout = (manager.findFragmentById(R.id.fragment_view)?.view?.parent as? ViewGroup)
+            fragmentLayout?.visibility = View.VISIBLE
         }
     }
 
@@ -84,8 +99,5 @@ class ScheduleDayToDayAdapter(private var scheduleDayList: MutableList<String>) 
         scheduleDayList = newScheduleList
         notifyDataSetChanged()
     }
+
 }
-
-
-
-

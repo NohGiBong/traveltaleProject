@@ -86,8 +86,8 @@ class ScheduleActivity : AppCompatActivity() {
                 }
                 adapter.notifyDataSetChanged()
 
-                // 프래그먼트와 리사이클러뷰를 표시하는 함수 호출
-                showScheduleLayout()
+                // 리사이클러뷰를 표시하는 함수 호출
+                showSchedulePeriod()
             }
         }
 
@@ -105,9 +105,9 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수
-    private fun showScheduleLayout() {
-        val scheduleLayout = findViewById<LinearLayout>(R.id.scheduleLayout)
-        scheduleLayout.visibility = View.VISIBLE
+    private fun showSchedulePeriod() {
+        val schedulePeriod = findViewById<LinearLayout>(R.id.schedule_layout)
+        schedulePeriod.visibility = View.VISIBLE
     }
 
     private fun showToast(message: String) {

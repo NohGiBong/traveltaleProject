@@ -65,7 +65,7 @@
 
         <!-- 프래그먼트와 리사이클러뷰를 감싸는 레이아웃 -->
         <LinearLayout
-            android:id="@+id/scheduleLayout"
+            android:id="@+id/schedule_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"

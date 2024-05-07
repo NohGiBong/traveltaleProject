@@ -86,7 +86,7 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"
                     android:text="start"
-                    android:textSize="15dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/hyphen_txt"
@@ -95,7 +95,7 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"
                     android:text="-"
-                    android:textSize="22dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/end_date_txt"
@@ -104,14 +104,14 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"
                     android:text="end"
-                    android:textSize="15dp" />
+                    android:textSize="16dp" />
 
                 <ImageButton
                     android:id="@+id/date_btn"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="11dp"
+                    android:layout_marginTop="4dp"
                     android:layout_toRightOf="@id/end_date_txt"
                     android:alpha="0.5"
                     android:background="@drawable/calendar"
@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="@string/tale_location"
-                    android:textSize="15dp"
+                    android:textSize="16dp"
                     android:layout_toRightOf="@id/map_img"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/kanit_font"

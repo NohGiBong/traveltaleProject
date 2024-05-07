@@ -1,3 +1,5 @@
+package com.example.traveltaleproject.schedule
+
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -5,12 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleModalBinding
 
@@ -53,7 +50,7 @@ class CustomModal(context: Context) : Dialog(context) {
         startTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedString = parent?.getItemAtPosition(position) as? String
-                selectedEndTime = selectedString?.substring(0, 2)?.toLongOrNull() ?: 0
+                selectedStartTime = selectedString?.substring(0, 2)?.toLongOrNull() ?: 0
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }

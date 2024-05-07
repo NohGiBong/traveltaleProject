@@ -1,6 +1,5 @@
 package com.example.traveltaleproject.schedule
 
-import CustomModal
 import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue

@@ -337,18 +337,24 @@ class MyPageActivity : AppCompatActivity() {
                     val userProfileImage = user.profileImage
                     if (!userNickname.isNullOrEmpty()) {
                         binding.mypageNickname.text = userNickname
-                        GlobalScope.launch(Dispatchers.Main) {
-                            val bitmap = withContext(Dispatchers.IO) {
-                                try {
-                                    Picasso.get().load(userProfileImage).get()
-                                } catch (e: IOException) {
-                                    null
+                        if (userProfileImage.isNullOrEmpty()) {
+                            // 사용자의 프로필 이미지가 없을 때 기본 이미지 설정
+                            binding.mypageProfile.setImageResource(R.drawable.profile)
+                        } else {
+                            // 사용자의 프로필 이미지를 Picasso를 사용하여 불러옴
+                            GlobalScope.launch(Dispatchers.Main) {
+                                val bitmap = withContext(Dispatchers.IO) {
+                                    try {
+                                        Picasso.get().load(userProfileImage).get()
+                                    } catch (e: IOException) {
+                                        null
+                                    }
                                 }
-                            }
 
-                            bitmap?.let {
-                                val circularBitmap = getCircularBitmap(it)
-                                binding.mypageProfile.setImageBitmap(circularBitmap)
+                                bitmap?.let {
+                                    val circularBitmap = getCircularBitmap(it)
+                                    binding.mypageProfile.setImageBitmap(circularBitmap)
+                                }
                             }
                         }
                     }

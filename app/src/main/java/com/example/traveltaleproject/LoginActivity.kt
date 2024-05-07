@@ -178,9 +178,9 @@ class LoginActivity : AppCompatActivity() {
                         val member = convertFirebaseUserToMember(user)
                         if (member != null) {
                             // 세션 저장
-                            saveSession(member)
                             showToast("구글 로그인 성공")
-                            startMyPageActivity()
+                            saveSession(member)
+                            startListActivity()
                         }
                     }
                 } else {
@@ -208,7 +208,7 @@ class LoginActivity : AppCompatActivity() {
 
                         showToast("네이버 로그인 성공")
                         saveSession(newUser)
-                        startMyPageActivity()
+                        startListActivity()
                     }
 
                     override fun onError(errorCode: Int, message: String) {
@@ -292,7 +292,7 @@ class LoginActivity : AppCompatActivity() {
                         isEmailExist = true
                         showToast("로그인 성공")
                         saveSession(user)
-                        startMyPageActivity()
+                        startListActivity()
                         break
                     }
                 }

@@ -68,7 +68,6 @@
             android:id="@+id/schedule_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:orientation="vertical"
             android:layout_below="@+id/tale_date">
 
@@ -78,7 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <!-- 일차 -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/schedule_day_item"
@@ -86,13 +86,13 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <fragment
-                android:name="com.example.traveltaleproject.schedule.ScheduleFragment"
+            <!-- 프래그먼트를 표시할 FrameLayout -->
+            <FrameLayout
                 android:id="@+id/fragment_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_below="@id/schedule_period" />
+                android:layout_below="@+id/tale_date">
+            </FrameLayout>
         </LinearLayout>
 
     </RelativeLayout>

@@ -96,6 +96,21 @@ class ScheduleActivity : AppCompatActivity() {
             picker.show(supportFragmentManager, picker.toString())
         }
 
+        // 리사이클러뷰 아이템 클릭 리스너 설정
+        recyclerView.addOnItemTouchListener(
+            RecyclerItemClickListener(this, recyclerView, object : RecyclerItemClickListener.OnItemClickListener {
+                override fun onItemClick(view: View, position: Int) {
+                    val clickedItem = scheduleDayList[position]
+                    // 아이템 클릭 이벤트를 처리하여 프래그먼트 표시
+                    showFragmentForDate(clickedItem)
+                }
+
+                override fun onLongItemClick(view: View?, position: Int) {
+                    // Do nothing
+                }
+            })
+        )
+
         // BottomNavigationHelper 초기화
         bottomNavigationHelper = BottomNavigationHelper(this, this)
 
@@ -106,8 +121,17 @@ class ScheduleActivity : AppCompatActivity() {
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수
     private fun showSchedulePeriod() {
-        val schedulePeriod = findViewById<LinearLayout>(R.id.schedule_layout)
+        val schedulePeriod = findViewById<LinearLayout>(R.id.schedule_period)
         schedulePeriod.visibility = View.VISIBLE
+    }
+
+    // showFragmentForDate 함수 추가
+    private fun showFragmentForDate(date: String) {
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        val fragment = ScheduleFragment.newInstance(date)
+        transaction.replace(R.id.fragment_view, fragment)
+        transaction.commit()
     }
 
     private fun showToast(message: String) {

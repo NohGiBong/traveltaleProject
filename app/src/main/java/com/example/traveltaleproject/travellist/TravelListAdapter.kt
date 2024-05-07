@@ -24,7 +24,8 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
         fun bind(travel: TravelList) {
             binding.apply {
                 itemTitle.text = travel.title
-                itemDate.text = travel.date
+                startDateTxt.text = travel.startDate
+                endDateTxt.text = travel.endDate
             }
         }
 

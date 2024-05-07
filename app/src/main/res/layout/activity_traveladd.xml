@@ -43,7 +43,7 @@
             android:backgroundTint="#FFFFFF">
         </androidx.cardview.widget.CardView>
         <RelativeLayout
-            android:layout_width="330dp"
+            android:layout_width="350dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp">
             <EditText
@@ -66,17 +66,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/input_title">
-                <EditText
-                    android:id="@+id/date_text"
+
+                <LinearLayout
+                    android:id="@+id/date_txt_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/date_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/input_date"
+                        android:textSize="16dp"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/kanit_font"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/selected_date_txt_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
                     android:layout_marginLeft="20dp"
-                    android:text="@string/input_date"
-                    android:textColor="#A1A1A1"
-                    android:textSize="16dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/kanit_font"/>
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/start_date_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/kanit_font"
+                        android:text="start"
+                        android:textSize="16dp"/>
+
+                    <TextView
+                        android:id="@+id/hyphen_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/kanit_font"
+                        android:text="-"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/end_date_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/kanit_font"
+                        android:text="end"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
                 <ImageButton
                     android:id="@+id/date_btn"
                     android:layout_width="20dp"
@@ -86,7 +129,7 @@
                     android:background="@drawable/calendar"
                     android:alpha="0.5"
                     android:filter="true"
-                    android:layout_toRightOf="@id/date_text" />
+                    android:layout_toRightOf="@+id/date_txt_layout"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -111,7 +154,6 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="10dp"
                     android:text="@string/input_map"
-                    android:textColor="#A1A1A1"
                     android:textSize="16dp"
                     android:layout_toRightOf="@id/map_btn"
                     android:background="@android:color/transparent"

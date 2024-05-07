@@ -4,29 +4,28 @@
     android:id="@+id/activity_chk"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToOutline="true"
-    android:background="#FFF4D9">
+    android:background="#FFF4D9"
+    android:clipToOutline="true">
     <!-- 스케줄 페이지 헤더 -->
     <RelativeLayout
         android:id="@+id/schedule_header"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#FFBB54"
-        >
+        android:background="#FFBB54">
+
         <TextView
             android:id="@+id/app_title"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
+            android:fontFamily="@font/kanit_font"
+            android:gravity="top"
             android:text="Schedule"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="30dp"
-            android:gravity="top"
-            android:fontFamily="@font/kanit_font"
-            />
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <!-- 스케줄 페이지 바디 -->
@@ -37,39 +36,60 @@
         android:layout_below="@id/schedule_header"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp">
-        <!-- 여행 일자 -->
-        <RelativeLayout
-            android:id="@+id/tale_date"
+
+        <LinearLayout
+            android:id="@+id/date_txt_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/date_txt"
+                android:id="@+id/start_date_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tale_date"
-                android:textSize="22dp"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/kanit_font"/>
+                android:fontFamily="@font/kanit_font"
+                android:text="start"
+                android:textSize="22dp" />
+
+            <TextView
+                android:id="@+id/hyphen_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/kanit_font"
+                android:text="-"
+                android:textSize="22dp" />
+
+            <TextView
+                android:id="@+id/end_date_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/kanit_font"
+                android:text="end"
+                android:textSize="22dp" />
+
             <ImageButton
                 android:id="@+id/date_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/calendar"
+                android:layout_toRightOf="@id/end_date_txt"
                 android:alpha="0.5"
-                android:filter="true"
-                android:layout_toRightOf="@id/date_txt" />
-        </RelativeLayout>
+                android:background="@drawable/calendar"
+                android:filter="true" />
+        </LinearLayout>
 
         <!-- 프래그먼트와 리사이클러뷰를 감싸는 레이아웃 -->
         <LinearLayout
             android:id="@+id/schedule_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/tale_date">
+            android:layout_below="@+id/date_txt_layout"
+            android:orientation="vertical">
 
             <!-- 일차 -->
             <LinearLayout
@@ -91,13 +111,11 @@
                 android:id="@+id/fragment_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tale_date">
-            </FrameLayout>
+                android:layout_below="@+id/tale_date"></FrameLayout>
         </LinearLayout>
 
     </RelativeLayout>
 
     <!-- bottom_navi.xml을 include -->
-    <include
-        layout="@layout/bottom_navigation" />
+    <include layout="@layout/bottom_navigation" />
 </RelativeLayout>

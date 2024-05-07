@@ -48,7 +48,8 @@ class ScheduleActivity : AppCompatActivity() {
         adapter.setFragmentManager(supportFragmentManager) // Activity에서 사용하는 경우
         recyclerView.adapter = adapter
 
-        val dateEditText = findViewById<TextView>(R.id.date_txt)
+        val startDateTxt = findViewById<TextView>(R.id.start_date_txt)
+        val endDateTxt = findViewById<TextView>(R.id.end_date_txt)
 
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker = builder.build()
@@ -65,7 +66,8 @@ class ScheduleActivity : AppCompatActivity() {
             val formattedStartDate = sdf.format(startDate.time)
             val formattedEndDate = sdf.format(endDate.time)
 
-            dateEditText.setText("$formattedStartDate - $formattedEndDate")
+            startDateTxt.setText("$formattedStartDate")
+            endDateTxt.setText("$formattedEndDate")
 
             // 두 날짜 간의 차이를 밀리초로 계산
             val differenceInMillis = endDate.timeInMillis - startDate.timeInMillis

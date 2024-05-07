@@ -69,7 +69,6 @@ class TravelListActivity : AppCompatActivity() {
                         travelList.add(it)
                     }
                 }
-                travelList.sortByDescending { it.date }
                 adapter.setList(travelList)
             }
 

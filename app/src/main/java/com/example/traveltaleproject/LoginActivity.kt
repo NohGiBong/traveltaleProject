@@ -8,7 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityLoginBinding
-import com.example.traveltaleproject.user.Member
+import com.example.traveltaleproject.models.Member
+import com.example.traveltaleproject.travellist.TravelListActivity
 import com.example.traveltaleproject.user.MyPageActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,7 +23,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.common.util.KakaoJson
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -114,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
                     if (user?.pw == pw) {
                         showToast("로그인 성공 🐥")
                         saveSession(user)
-                        startMyPageActivity()
+                        startListActivity()
                     } else {
                         showToast("비밀번호가 일치하지 않습니다.")
                     }
@@ -159,7 +159,7 @@ class LoginActivity : AppCompatActivity() {
             val email = firebaseUser.email
             val userName = firebaseUser.displayName
 
-            val newUser = Member(userName, userId, "", email, "", "google")
+            val newUser = Member(userName, userId, "", email, "", "google", "")
             databaseReference.child(userId).setValue(newUser)
             return newUser
         }
@@ -201,7 +201,7 @@ class LoginActivity : AppCompatActivity() {
                         val mobile = result.profile?.mobile.toString()
                         val id = result.profile?.id
 
-                        val newUser = Member(name, id, "", email, mobile, "naver")
+                        val newUser = Member(name, id, "", email, mobile, "naver", "")
                         if (id != null) {
                             databaseReference.child(id).setValue(newUser)
                         }
@@ -320,7 +320,8 @@ class LoginActivity : AppCompatActivity() {
             "",
             email,
             "",
-            loginType
+            loginType,
+            ""
         )
         databaseReference.child(userId).setValue(newUser)
 
@@ -343,6 +344,12 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, MyPageActivity::class.java)
         startActivity(intent)
         finish() // LoginActivity 종료
+    }
+
+    private fun startListActivity() {
+        val intent = Intent(this, TravelListActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     // uuid 생성 : 카카오는 id를 제공해주지 않음

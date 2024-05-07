@@ -11,11 +11,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.traveltaleproject.BottomNavigationHelper
-import com.example.traveltaleproject.PhoneTextWatcher
+import com.example.traveltaleproject.utils.PhoneTextWatcher
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityMyinfoBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.traveltaleproject.models.Member
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -27,7 +26,6 @@ class MyInfoActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
     private var isPwValid: Boolean = false
-    private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,13 +80,6 @@ class MyInfoActivity : AppCompatActivity() {
 
         // Phone 입력 필드 TextWatcher 추가 : 자동 하이폰 추가
         binding.myinfoPhone.addTextChangedListener(PhoneTextWatcher(binding))
-
-        // BottomNavigationHelper 초기화
-        bottomNavigationHelper = BottomNavigationHelper(this, this)
-
-        // 네비게이션 뷰의 아이템 선택 리스너 설정
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 
     private fun fetchUserInfo(userId: String) {

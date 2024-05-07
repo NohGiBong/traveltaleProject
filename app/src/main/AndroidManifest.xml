@@ -6,11 +6,18 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <!-- 외부 저장소 읽기 권한 추가 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- 인터넷 접속 권한 추가 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
+        android:name=".travellist.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,27 +26,62 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.TraveltaleProject"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBcMGGKyO_NG1gRlNwJni0fxpwMLTbIGW4" />
+
+        <activity android:name=".travellist.GoogleMapActivity" />
 
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
-
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".travellist.TravelListActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".travellist.TravelAddActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".GetActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".checklist.CheckListActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".tale.TaleEditActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".tale.TaleGetActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".tale.TaleWriteActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".user.MyPageActivity"
             android:exported="true">
@@ -48,44 +90,24 @@
             android:name=".user.MyInfoActivity"
             android:exported="true">
         </activity>
-
         <activity
-            android:name=".CheckListActivity"
-            android:exported="true" />
-
-        <activity android:name=".schedule.ScheduleActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".GetActivity"
-            android:exported="true">
-
-
-        </activity>
-
-        <activity
-            android:name=".ListActivity"
-            android:exported="true">
-        </activity>
-
-
-        <activity
-            android:name=".tale.TaleWriteActivity"
-            android:exported="true" >
-
-        </activity>
-
-        <activity
-            android:name=".tale.TaleGetActivity"
+            android:name=".user.MyPrivacyPolicy"
             android:exported="true">
         </activity>
 
         <activity
-            android:name=".tale.TaleEditActivity"
-            android:exported="true" >
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao9a3023c46872f7bbb18568a2efdd411f" />
+            </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

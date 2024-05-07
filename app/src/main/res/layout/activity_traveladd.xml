@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:background="#D9D9D9"
         >
+
         <ImageView
             android:id="@+id/img_add"
             android:layout_width="45dp"
@@ -52,9 +53,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="50dp"
                 android:layout_marginLeft="20dp"
-                android:text="@string/input_title"
+                android:hint="@string/input_title"
                 android:textColor="#A1A1A1"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:gravity="top"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/kanit_font"
@@ -139,8 +140,6 @@
                     android:backgroundTint="#45B47F" />
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
-
-        <!-- bottom_navi.xml을 include -->
-        <include layout="@layout/bottom_navigation" />
     </RelativeLayout>
+
 </RelativeLayout>

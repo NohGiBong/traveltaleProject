@@ -146,5 +146,6 @@
     <string name="naver_client_id">TmhpRvB9Sbmpp7gVBk4B</string>
     <string name="naver_client_secret">HTE04sPRKL</string>
     <string name="naver_client_name">traveltale</string>
+    <string name="google_maps_key">AIzaSyBcMGGKyO_NG1gRlNwJni0fxpwMLTbIGW4</string>
 
 </resources>

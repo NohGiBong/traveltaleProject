@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -16,13 +15,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.traveltaleproject.databinding.ActivityRegisterBinding
-import com.example.traveltaleproject.user.Member
+import com.example.traveltaleproject.models.Member
+import com.example.traveltaleproject.utils.PhoneTextWatcher
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kakao.sdk.common.KakaoSdk.type
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -55,7 +54,7 @@ class RegisterActivity : AppCompatActivity() {
                 val phone = binding.regiPhone.text.toString()
 
                 // 회원 정보 객체 생성
-                val member = Member(nickname, id, pw, email, phone, "normal")
+                val member = Member(nickname, id, pw, email, phone, "normal", "")
 
                 // Firebase Realtime DB 회원 정보 저장
                 databaseReference.child(id).setValue(member)

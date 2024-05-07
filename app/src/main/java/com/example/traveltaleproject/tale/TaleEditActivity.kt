@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.databinding.ActivityTaleEditBinding
+import com.example.traveltaleproject.models.TaleData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -24,9 +25,9 @@ class TaleEditActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
 
         // 기존 데이터 불러오기
-        val aid = intent.getStringExtra("aid") // 수정할 데이터의 고유 ID
-        if (aid != null) {
-            database.child("tales").child(aid).addListenerForSingleValueEvent(object :
+        val talesid = intent.getStringExtra("talesid") // 수정할 데이터의 고유 ID
+        if (talesid != null) {
+            database.child("tales").child(talesid).addListenerForSingleValueEvent(object :
                 ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     taleData = dataSnapshot.getValue(TaleData::class.java)!!
@@ -48,13 +49,12 @@ class TaleEditActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     private fun updateTaleInDatabase(taleText: String) {
         // 기존 데이터 업데이트
         taleData.text = taleText
-        database.child("tales").child(taleData.aid).setValue(taleData)
+        database.child("tales").child(taleData.talesid).setValue(taleData)
             .addOnSuccessListener {
                 // 업데이트 성공 시 처리
                 val intent = Intent(this, TaleGetActivity::class.java)

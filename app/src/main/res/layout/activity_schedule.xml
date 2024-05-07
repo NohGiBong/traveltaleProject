@@ -111,9 +111,8 @@
                 android:id="@+id/fragment_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tale_date"></FrameLayout>
+                android:layout_below="@+id/tale_date" />
         </LinearLayout>
-
     </RelativeLayout>
 
     <!-- bottom_navi.xml을 include -->

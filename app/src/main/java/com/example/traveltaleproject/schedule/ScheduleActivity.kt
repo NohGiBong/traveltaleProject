@@ -67,28 +67,6 @@ class ScheduleActivity : AppCompatActivity() {
         startDateTxt = binding.startDateTxt
         endDateTxt = binding.endDateTxt
 
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        val picker = builder.build()
-
-        binding.dateBtn.setOnClickListener {
-            picker.show(supportFragmentManager, picker.toString())
-        }
-
-        // 리사이클러뷰 아이템 클릭 리스너 설정
-        recyclerView.addOnItemTouchListener(
-            RecyclerItemClickListener(this, recyclerView, object : RecyclerItemClickListener.OnItemClickListener {
-                override fun onItemClick(view: View, position: Int) {
-                    val clickedItem = scheduleDayList[position]
-                    // 아이템 클릭 이벤트를 처리하여 프래그먼트 표시
-                    showFragmentForDate(clickedItem)
-                }
-
-                override fun onLongItemClick(view: View?, position: Int) {
-                    // Do nothing
-                }
-            })
-        )
-
         // BottomNavigationHelper 초기화
         bottomNavigationHelper = BottomNavigationHelper(this, this)
 
@@ -114,57 +92,48 @@ class ScheduleActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Error handling
             }
         })
     }
 
     private fun applyDateRangePicker(startCalendar: Calendar, endCalendar: Calendar) {
-        val picker = MaterialDatePicker.Builder.dateRangePicker()
-            .setSelection(
-                androidx.core.util.Pair(
-                    startCalendar.timeInMillis,
-                    endCalendar.timeInMillis
-                )
-            )
-            .build()
+        val startDateInMillis = startCalendar.timeInMillis
+        val endDateInMillis = endCalendar.timeInMillis
 
-        picker.addOnPositiveButtonClickListener {
-            val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
-            val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
+        val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
 
-            val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
+        startDate = startCalendar
+        endDate = endCalendar
 
-            startDate = Calendar.getInstance().apply { timeInMillis = startDateInMillis }
-            endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
+        val formattedStartDate = sdf.format(startDate.time)
+        val formattedEndDate = sdf.format(endDate.time)
 
-            val formattedStartDate = sdf.format(startDate.time)
-            val formattedEndDate = sdf.format(endDate.time)
+        startDateTxt.text = formattedStartDate
+        endDateTxt.text = formattedEndDate
 
-            startDateTxt.text = formattedStartDate
-            endDateTxt.text = formattedEndDate
+        // 두 날짜 간의 차이를 밀리초로 계산
+        val differenceInMillis = endDate.timeInMillis - startDate.timeInMillis
 
-            // 두 날짜 간의 차이를 밀리초로 계산
-            val differenceInMillis = endDate.timeInMillis - startDate.timeInMillis
+        // 밀리초를 일로 변환
+        val differenceInDays: Long = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
 
-            // 밀리초를 일로 변환
-            val differenceInDays: Long = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
+        // 토스트로 기간 출력
+        showToast("기간 출력 : $differenceInDays.toString()")
 
-            // 토스트로 기간 출력
-            showToast("기간 출력 : $differenceInDays.toString()")
-
-            // Adapter에 데이터 추가 및 갱신
-            scheduleDayList.clear()
-            for (i in 1..differenceInDays) {
-                scheduleDayList.add("$i" + "일차")
-            }
-            adapter.notifyDataSetChanged()
-
-            // 리사이클러뷰를 표시하는 함수 호출
-            showSchedulePeriod()
+        // Adapter에 데이터 추가 및 갱신
+        scheduleDayList.clear()
+        for (i in 1..differenceInDays) {
+            scheduleDayList.add("$i" + "일차")
         }
+        adapter.notifyDataSetChanged()
 
-        picker.show(supportFragmentManager, "DateRangePicker")
+        // 리사이클러뷰를 표시하는 함수 호출
+        showSchedulePeriod()
+
+        // 선택된 날짜에 따라 자동으로 프래그먼트 표시
+        val selectedDate = sdf.format(startDate.time)
+        showFragmentForDate(selectedDate)
     }
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수

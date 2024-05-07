@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.travellist.TravelListActivity
 import com.example.traveltaleproject.user.MyPageActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -22,9 +23,9 @@ class BottomNavigationHelper(private val activity: AppCompatActivity, val contex
     fun handleMenuItemClick(itemId: Int): Boolean {
         when (itemId) {
             R.id.home_item -> {
-                if (currentActivityName != "GetActivity") {
+                if (currentActivityName != "TravelListActivity") {
                     // 현재 페이지가 GetActivity가 아니면 HomeActivity로 이동
-                    val intent = Intent(activity, GetActivity::class.java)
+                    val intent = Intent(activity, TravelListActivity::class.java)
                     activity.startActivity(intent)
 //                    val toast = Toast.makeText(activity, currentActivityName, Toast.LENGTH_SHORT)
 //                    toast.show()

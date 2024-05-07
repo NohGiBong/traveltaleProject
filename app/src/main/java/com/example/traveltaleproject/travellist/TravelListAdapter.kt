@@ -12,6 +12,8 @@ import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTravellistItemBinding
 import com.example.traveltaleproject.models.Check
 import com.example.traveltaleproject.models.TravelList
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TravelListAdapter(private val context: Context, private val travelList: MutableList<TravelList>, private val userId: String) : RecyclerView.Adapter<TravelListAdapter.TravelListViewHolder>() {
 
@@ -24,8 +26,10 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
         fun bind(travel: TravelList) {
             binding.apply {
                 itemTitle.text = travel.title
-                startDateTxt.text = travel.startDate.toString()
-                endDateTxt.text = travel.endDate.toString()
+                val startDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(travel.startDate)
+                val endDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(travel.endDate)
+                startDateTxt.text = startDate
+                endDateTxt.text = endDate
             }
         }
 

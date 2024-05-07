@@ -50,7 +50,6 @@ class TravelListActivity : AppCompatActivity() {
         // 데이터 가져오기
         fetchTravelList()
 
-
         // BottomNavigationHelper 초기화
         bottomNavigationHelper = BottomNavigationHelper(this, this)
 

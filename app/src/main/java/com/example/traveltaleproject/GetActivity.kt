@@ -1,5 +1,6 @@
 package com.example.traveltaleproject
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -71,7 +72,9 @@ class GetActivity : AppCompatActivity() {
         val travelListId = intent.getStringExtra("travelListId") ?: ""
 
         // Firebase Database의 Reference 설정
-        databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
+        databaseReference =
+            FirebaseDatabase.getInstance().reference.child("TravelList").child(userId)
+                .child(travelListId)
 
         // 데이터 가져오기
         fetchTravelListData()
@@ -95,7 +98,8 @@ class GetActivity : AppCompatActivity() {
             val userId = getSessionId()
 
             // Firebase Database의 Reference 설정
-            val talesRef = FirebaseDatabase.getInstance().getReference("TravelList").child(userId).child(travelListId)
+            val talesRef = FirebaseDatabase.getInstance().getReference("TravelList").child(userId)
+                .child(travelListId)
 
             talesRef.child("tales").addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -136,6 +140,12 @@ class GetActivity : AppCompatActivity() {
         // 네비게이션 뷰의 아이템 선택 리스너 설정
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
+
+        // 여행 일정 제목 변
+        setUpTitle()
+
+        // 여행 일정 날짜 변경
+
     }
 
     private fun fetchTravelListData() {
@@ -160,6 +170,43 @@ class GetActivity : AppCompatActivity() {
             }
         })
     }
+
+    // 제목 수정
+    private fun setUpTitle() {
+        val initialTitle = binding.getTitle.text.toString()
+
+        binding.getTitle.setOnEditorActionListener { _, _, _ ->
+            val newTitle = binding.getTitle.text.toString()
+
+            if (newTitle != initialTitle) {
+                showConfirmDialog(newTitle)
+            }
+            true
+        }
+    }
+
+    private fun showConfirmDialog(newTitle: String) {
+        val builder = AlertDialog.Builder(this, R.style.RoundedCornersDialog)
+        builder.setTitle("제목을 변경하시겠습니까?")
+            .setPositiveButton("확인") { _, _ ->
+                databaseReference.child("title").setValue(newTitle)
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        val dialog = builder.create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(resources.getColor(R.color.black))
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(resources.getColor(R.color.black))
+        }
+
+        dialog.show()
+    }
+
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()
     }

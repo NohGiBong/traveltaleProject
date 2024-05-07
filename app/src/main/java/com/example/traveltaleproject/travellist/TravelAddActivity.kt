@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import com.example.traveltaleproject.databinding.ActivityTraveladdBinding
 import com.example.traveltaleproject.models.TravelList
 import com.example.traveltaleproject.user.MyPageActivity
@@ -38,6 +39,9 @@ class TravelAddActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var selectedImageUri: Uri
     private var MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101
+
+    private var startDateIntent: Long? = null
+    private var endDateIntent: Long? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTraveladdBinding.inflate(layoutInflater)
@@ -46,7 +50,6 @@ class TravelAddActivity : AppCompatActivity() {
         // SharedPreferences 초기화
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", "")
-        showToast("$userId")
 
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList")
 
@@ -56,7 +59,9 @@ class TravelAddActivity : AppCompatActivity() {
 
             picker.addOnPositiveButtonClickListener {
                 val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
+                startDateIntent = startDateInMillis
                 val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
+                endDateIntent = endDateInMillis
 
                 val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
 
@@ -144,14 +149,19 @@ class TravelAddActivity : AppCompatActivity() {
 
     private fun saveTravelList() {
         val title = binding.inputTitle.text.toString().trim()
-        val date = binding.dateText.text.toString().trim()
+        val date = binding.selectedDateTxtLayout.toString().trim()
         val userId = sharedPreferences.getString("user_id", "")
         val address = binding.mapText.text.toString().trim()
+        val startDateIntent = startDateIntent
+        val endDateIntent = endDateIntent
 
         if (title.isNotEmpty() && date.isNotEmpty() && ::selectedImageUri.isInitialized) {
+            val startDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(startDateIntent)
+            val endDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(endDateIntent)
+
             val travelListId = UUID.randomUUID().toString()
             val imageName = "travel_lists/$userId//$travelListId.jpg"
-            val travel = TravelList(travelListId, title, date, address, imageName)
+            val travel = TravelList(travelListId, title, "$startDate - $endDate", address, imageName, startDateIntent ?: 0L, endDateIntent ?: 0L)
 
             // Firebase Storage에 이미지 업로드
             val storageReference = FirebaseStorage.getInstance().reference.child(imageName)
@@ -187,8 +197,10 @@ class TravelAddActivity : AppCompatActivity() {
 
     private fun startTravelListActivity() {
         val intent = Intent(this, TravelListActivity::class.java)
+        intent.putExtra("startDateIntent", startDateIntent)
+        intent.putExtra("endDateIntent", endDateIntent)
         startActivity(intent)
-        finish() // LoginActivity 종료
+        finish()
     }
 
     private fun showToast(message: String) {

@@ -1,5 +1,6 @@
 package com.example.traveltaleproject
 
+import com.example.traveltaleproject.schedule.ScheduleActivity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -12,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.checklist.CheckListActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
 import com.example.traveltaleproject.models.TaleData
-import com.example.traveltaleproject.schedule.ScheduleActivity
 import com.example.traveltaleproject.tale.TaleGetActivity
 import com.example.traveltaleproject.tale.TaleWriteActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -89,6 +89,7 @@ class GetActivity : AppCompatActivity() {
         // 여행 일정 버튼 클릭 시 이벤트
         binding.getScheduleBtn.setOnClickListener {
             val intent = Intent(this, ScheduleActivity::class.java)
+            intent.putExtra("travelListId", travelListId)
             startActivity(intent)
         }
 

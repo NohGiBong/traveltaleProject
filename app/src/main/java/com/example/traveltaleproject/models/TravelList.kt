@@ -3,7 +3,8 @@ package com.example.traveltaleproject.models
 data class TravelList(
     val travelListId: String = "",
     val title: String = "",
-    val date: String = "",
+    val startDate: String = "",
+    val endDate: String = "",
     val address: String = "",
     var travelImage: String = ""
 ) {

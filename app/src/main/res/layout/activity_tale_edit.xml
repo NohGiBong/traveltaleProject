@@ -78,7 +78,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true">
             <EditText
-                android:id="@+id/tale_write_title"
+                android:id="@+id/tale_edit_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -91,33 +91,53 @@
                 android:textFontWeight="900"
                 />
 
-            <!-- 여행 일자 -->
-            <RelativeLayout
-                android:id="@+id/tale_write_date"
+            <!-- 여행 일자 수정 -->
+            <LinearLayout
+                android:id="@+id/tale_edit_date_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tale_write_title"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/tale_edit_title">
+
                 <TextView
-                    android:id="@+id/date_txt"
+                    android:id="@+id/start_date_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tale_date"
-                    android:textSize="16dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/kanit_font"/>
-                <!-- 일자 수정 버튼 -->
+                    android:fontFamily="@font/kanit_font"
+                    android:text="start"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/hyphen_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/kanit_font"
+                    android:text="-"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/end_date_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/kanit_font"
+                    android:text="end"
+                    android:textSize="15dp" />
+
                 <ImageButton
                     android:id="@+id/date_btn"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/calendar"
+                    android:layout_marginTop="11dp"
+                    android:layout_toRightOf="@id/end_date_txt"
                     android:alpha="0.5"
-                    android:filter="true"
-                    android:layout_toRightOf="@id/date_txt" />
-            </RelativeLayout>
+                    android:background="@drawable/calendar"
+                    android:filter="true" />
+            </LinearLayout>
 
             <!-- 위치 -->
             <RelativeLayout
@@ -125,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_below="@id/tale_write_date">
+                android:layout_below="@id/tale_edit_date_layout">
                 <!-- 위치 수정 버튼 -->
                 <ImageButton
                     android:id="@+id/map_btn"

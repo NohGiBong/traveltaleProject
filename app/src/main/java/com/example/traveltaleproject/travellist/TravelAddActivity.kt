@@ -14,6 +14,8 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Editable
 import android.util.Log
+import android.view.View
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -62,9 +64,19 @@ class TravelAddActivity : AppCompatActivity() {
                 val endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
 
                 val formattedStartDate = sdf.format(startDate.time)
+                showToast(formattedStartDate)
                 val formattedEndDate = sdf.format(endDate.time)
 
-                dateText.setText("$formattedStartDate - $formattedEndDate")
+                dateTxtLayout.visibility = View.GONE
+                // selected_date_txt_layout을 visible로 설정
+                selectedDateTxtLayout.visibility = View.VISIBLE
+                // selected_date_txt_layout이 visible로 설정된 후
+                val layoutParams = dateBtn.layoutParams as RelativeLayout.LayoutParams
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, selectedDateTxtLayout.id)
+                dateBtn.layoutParams = layoutParams
+
+                startDateTxt.text = (formattedStartDate)
+                endDateTxt.text = (formattedEndDate)
             }
 
             mapBtn.setOnClickListener {

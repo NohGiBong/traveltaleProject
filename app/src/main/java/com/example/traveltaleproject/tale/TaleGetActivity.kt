@@ -92,13 +92,15 @@ class TaleGetActivity : AppCompatActivity() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val title = snapshot.child("title").value.toString()
-                val date = snapshot.child("date").value.toString()
+                val startDate = snapshot.child("startDate").value.toString()
+                val endDate = snapshot.child("endDate").value.toString()
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
                 // 가져온 데이터를 바인딩에 설정
                 binding.taleGetTitle.setText(title)
-                binding.dateTxt.setText(date)
+                binding.startDateTxt.setText(startDate)
+                binding.endDateTxt.setText(endDate)
                 binding.mapTxt.setText(address)
 
                 Picasso.get().load(travelImage).into(binding.mainImg)

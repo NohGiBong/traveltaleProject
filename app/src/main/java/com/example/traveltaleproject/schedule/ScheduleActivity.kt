@@ -31,11 +31,13 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScheduleBinding
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userId: String
+    private lateinit var travelListId: String
 
     private lateinit var startDateTxt: TextView
     private lateinit var endDateTxt: TextView
     private lateinit var scheduleDayList: MutableList<String>
     private lateinit var adapter: ScheduleDayToDayAdapter
+    private var isDataSavedToDatabase = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class ScheduleActivity : AppCompatActivity() {
         userId = getSessionId()
 
         // Intent로 전달된 TravelListId 가져오기
-        val travelListId = intent.getStringExtra("travelListId") ?: ""
+        travelListId = intent.getStringExtra("travelListId") ?: ""
 
         // Firebase Database의 Reference 설정
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
@@ -76,11 +78,17 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun fetchDateFromDB() {
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList").child(userId).child(travelListId)
+
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val startDate = snapshot.child("startDate").value as Long
                     val endDate = snapshot.child("endDate").value as Long
+
+                    // DB에 travelListId에 schedule 경로가 있으면 프래그먼트 식별자 생성 X
+                    isDataSavedToDatabase = snapshot.hasChild("schedule")
 
                     // startDate와 endDate를 Calendar 객체로 변환
                     val startCalendar = Calendar.getInstance().apply { timeInMillis = startDate }
@@ -88,6 +96,8 @@ class ScheduleActivity : AppCompatActivity() {
 
                     // DateRangePicker에 startDate와 endDate 적용
                     applyDateRangePicker(startCalendar, endCalendar)
+                } else {
+                    isDataSavedToDatabase = false
                 }
             }
 
@@ -118,9 +128,6 @@ class ScheduleActivity : AppCompatActivity() {
         // 밀리초를 일로 변환
         val differenceInDays: Long = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
 
-        // 토스트로 기간 출력
-        showToast("기간 출력 : $differenceInDays.toString()")
-
         // Adapter에 데이터 추가 및 갱신
         scheduleDayList.clear()
         for (i in 1..differenceInDays) {
@@ -134,6 +141,10 @@ class ScheduleActivity : AppCompatActivity() {
         // 선택된 날짜에 따라 자동으로 프래그먼트 표시
         val selectedDate = sdf.format(startDate.time)
         showFragmentForDate(selectedDate)
+
+        if (!isDataSavedToDatabase) {
+            saveFragmentsToDatabase()
+        }
     }
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수
@@ -148,6 +159,28 @@ class ScheduleActivity : AppCompatActivity() {
         val fragment = ScheduleFragment.newInstance(date)
         transaction.replace(binding.fragmentView.id, fragment)
         transaction.commit()
+    }
+
+    private fun saveFragmentsToDatabase() {
+        // 최상위 노드 참조
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
+
+        for ((index, day) in scheduleDayList.withIndex()) {
+            val daySection = "day${index+1}"
+
+            // 해당 날짜에 대한 데이터 생성
+            val fragmentData = HashMap<String, Any>()
+            fragmentData["daysection"] = daySection
+
+            // 데이터베이스에 저장
+            databaseReference.child("schedule").child(daySection).setValue(fragmentData)
+                .addOnSuccessListener {
+                    //
+                }
+                .addOnFailureListener {
+                    //
+                }
+        }
     }
 
     private fun getSessionId(): String {

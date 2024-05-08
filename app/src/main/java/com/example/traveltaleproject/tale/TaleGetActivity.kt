@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTaleGetBinding
-import com.example.traveltaleproject.databinding.ActivityTaleWriteBinding
 import com.example.traveltaleproject.models.TaleData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -62,14 +60,15 @@ class TaleGetActivity : AppCompatActivity() {
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.action_edit -> {
-                            val intent = Intent(this@TaleGetActivity, TaleEditActivity::class.java)
+                            val intent = Intent(this@TaleGetActivity, TaleWriteActivity::class.java)
+
                             if (taleData != null) {
                                 // 수정할 데이터의 고유 ID 전달
                                 intent.putExtra("talesid", taleData.talesid)
+                                intent.putExtra("travelListId", travelListId)
                             }
                             startActivity(intent)
                             finish()
-
                             Toast.makeText(this@TaleGetActivity, "수정 클릭", Toast.LENGTH_SHORT).show()
                         }
                         R.id.action_delete -> {

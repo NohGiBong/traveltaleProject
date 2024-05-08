@@ -12,9 +12,11 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
+import com.example.traveltaleproject.models.Check
+import com.example.traveltaleproject.models.ScheduleData
 
 
-class ScheduleItemAdapter(private val context: Context?, private var dataSet: List<CustomModal.ScheduleData>) :
+class ScheduleItemAdapter(private val context: Context?, private var dataSet: MutableList<ScheduleData>) :
     RecyclerView.Adapter<ScheduleItemAdapter.ScheduleViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -98,11 +100,17 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Li
     }
 
     inner class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val startTimeText: TextView = view.findViewById(R.id.schedule_start_time)
-        val endTimeText: TextView = view.findViewById(R.id.schedule_end_time)
-        val cardView: CardView = view.findViewById(R.id.schedule_txt_cardview)
-        val timeText:RelativeLayout = view.findViewById(R.id.time_txt)
-        val scheduleText: TextView = view.findViewById(R.id.schedule_txt)
+        val startTimeText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_start_time) }
+        val endTimeText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_end_time) }
+        val cardView: CardView by lazy { view.findViewById<CardView>(R.id.schedule_txt_cardview) }
+        val timeText: RelativeLayout by lazy { view.findViewById<RelativeLayout>(R.id.time_txt) }
+        val scheduleText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_txt) }
+    }
+
+    fun setData(newDataList: MutableList<ScheduleData>) {
+        dataSet.clear()
+        dataSet.addAll(newDataList)
+        notifyDataSetChanged()
     }
 
 }

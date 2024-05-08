@@ -12,12 +12,13 @@ import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -62,7 +63,7 @@ class ScheduleActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         scheduleDayList = mutableListOf<String>()
-        adapter = ScheduleDayToDayAdapter(scheduleDayList)
+        adapter = ScheduleDayToDayAdapter(scheduleDayList, userId, travelListId)
         adapter.setFragmentManager(supportFragmentManager) // Activity에서 사용하는 경우
         recyclerView.adapter = adapter
 
@@ -108,9 +109,6 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun applyDateRangePicker(startCalendar: Calendar, endCalendar: Calendar) {
-        val startDateInMillis = startCalendar.timeInMillis
-        val endDateInMillis = endCalendar.timeInMillis
-
         val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
 
         startDate = startCalendar
@@ -145,6 +143,22 @@ class ScheduleActivity : AppCompatActivity() {
         if (!isDataSavedToDatabase) {
             saveFragmentsToDatabase()
         }
+
+        fetchScheduleList()
+    }
+
+    private fun fetchScheduleList() {
+        val scheduleList = Firebase.database.getReference().child("TravelList").child(userId).child(travelListId)
+
+        scheduleList.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수
@@ -156,7 +170,7 @@ class ScheduleActivity : AppCompatActivity() {
     private fun showFragmentForDate(date: String) {
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        val fragment = ScheduleFragment.newInstance(date)
+        val fragment = ScheduleFragment.newInstance(date, travelListId, userId)
         transaction.replace(binding.fragmentView.id, fragment)
         transaction.commit()
     }
@@ -170,10 +184,10 @@ class ScheduleActivity : AppCompatActivity() {
 
             // 해당 날짜에 대한 데이터 생성
             val fragmentData = HashMap<String, Any>()
-            fragmentData["daysection"] = daySection
+            fragmentData["day-section"] = daySection
 
             // 데이터베이스에 저장
-            databaseReference.child("schedule").child(daySection).setValue(fragmentData)
+            databaseReference.child("schedule").child(daySection).setValue("")
                 .addOnSuccessListener {
                     //
                 }

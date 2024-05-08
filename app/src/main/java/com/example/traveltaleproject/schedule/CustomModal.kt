@@ -80,7 +80,13 @@ class CustomModal(
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // 수정 모드인지 새로운 추가 모드인지 구분하기 위한 플래그
+        if (scheduleData != null && scheduleData?.scheduleTimeId == scheduleTimeId) {
+            // If scheduleData is not null and scheduleTimeId matches, it's edit mode
+            startTimeSpinner.setSelection(scheduleData?.startTime?.toInt() ?: 0)
+            endTimeSpinner.setSelection(scheduleData?.endTime?.toInt() ?: 0)
+            scheduleTxtEdit.setText(scheduleData?.scheduleText)
+        }
+
         val isEditMode = (scheduleData != null)
 
         if (isEditMode) {
@@ -97,6 +103,9 @@ class CustomModal(
                 if (scheduleData != null && scheduleData?.scheduleTimeId == scheduleTimeId) {
                     // scheduleData가 null이 아니고 scheduleTimeId가 일치하면 수정 모드입니다.
                     // 기존의 일정을 업데이트합니다.
+                    // 수정 모드인지 새로운 추가 모드인지 구분하기 위한 플래그
+
+
                     showToast("일정 업데이트 성공", context)
                     scheduleData?.startTime = selectedStartTime
                     scheduleData?.endTime = selectedEndTime
@@ -104,10 +113,16 @@ class CustomModal(
 
                     val updatedScheduleData = ScheduleData(selectedStartTime, selectedEndTime, scheduleText, scheduleTimeId)
                     updateScheduleData(updatedScheduleData)
+                    scheduleDataListener?.onScheduleDataReceived(scheduleData!!)
                 } else {
-                    createScheduleData(selectedStartTime, selectedEndTime, scheduleText)
-                    saveScheduleDataToDatabase(scheduleData)
-                    scheduleData?.let { it1 -> scheduleDataListener?.onScheduleDataReceived(it1) }
+                    // 일정 데이터를 생성
+                    val scheduleData = createScheduleData(selectedStartTime, selectedEndTime, scheduleText)
+
+                    // 인터페이스를 통해 일정 데이터를 fragment로 전달
+                    scheduleDataListener?.onScheduleDataReceived(scheduleData)
+
+                    // 다이얼로그 닫기
+                    dismiss()
                 }
                 dismiss()
             } else if (scheduleText.isBlank()) {
@@ -131,25 +146,20 @@ class CustomModal(
         return ScheduleData(startTime, endTime, scheduleText, scheduleTimeId)
     }
 
-    private fun saveScheduleDataToDatabase(scheduleData: ScheduleData?) {
-        if (scheduleData != null) {
-            updateScheduleData(scheduleData)
-        } else {
-            val databaseReference = FirebaseDatabase.getInstance().reference
-                .child("TravelList").child(userId).child(travelListId)
+    private fun saveScheduleDataToDatabase(scheduleData: ScheduleData) {
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList").child(userId).child(travelListId)
 
-            // 해당 daysection 노드에 데이터 저장
-            val scheduleRef = databaseReference.child("schedule").child(daySection)
+        // 해당 daysection 노드에 데이터 저장
+        val scheduleRef = databaseReference.child("schedule").child(daySection).child(scheduleData.scheduleTimeId)
 
-            // scheduleTimeId를 사용하여 데이터 저장
-            scheduleRef.child(scheduleTimeId).setValue(scheduleData)
-                .addOnSuccessListener {
-                    Log.d("dbReal", "추가 성공")
-                }
-                .addOnFailureListener {
-                    Log.d("dbReal", "추가 실패")
-                }
-        }
+        scheduleRef.setValue(scheduleData)
+            .addOnSuccessListener {
+                Log.d("dbReal", "저장 성공")
+            }
+            .addOnFailureListener {
+                Log.d("dbReal", "저장 실패")
+            }
     }
 
     private fun updateScheduleData(scheduleDataToUpdate: ScheduleData) {

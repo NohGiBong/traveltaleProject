@@ -2,6 +2,7 @@ package com.example.traveltaleproject.schedule
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.models.Check
 import com.example.traveltaleproject.models.ScheduleData
+import com.google.firebase.database.FirebaseDatabase
 
 
 class ScheduleItemAdapter(private val context: Context?,
@@ -85,7 +87,9 @@ class ScheduleItemAdapter(private val context: Context?,
         }
 
         holder.deleteBtn.setOnClickListener {
-
+            deleteItemFromDatabase(item)
+            dataSet.remove(item)
+            notifyDataSetChanged()
         }
     }
 
@@ -107,6 +111,20 @@ class ScheduleItemAdapter(private val context: Context?,
             dialog.setScheduleData(item) // 해당 아이템의 정보를 모달창에 전달
             dialog.show()
         }
+    }
+
+    private fun deleteItemFromDatabase(item: ScheduleData) {
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList").child(userId).child(travelListId)
+            .child("schedule").child(daySection).child(item.scheduleTimeId)
+
+        databaseReference.removeValue()
+            .addOnSuccessListener {
+                Log.d("FirebaseDB", "아이템 삭제 성공")
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirebaseDB", "아이템 삭제 실패", e)
+            }
     }
 
     inner class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {

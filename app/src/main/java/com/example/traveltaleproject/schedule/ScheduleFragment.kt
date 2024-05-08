@@ -24,6 +24,7 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
     private var dataSet = mutableListOf<ScheduleData>()
     private lateinit var travelListId: String
     private lateinit var userId: String
+    private lateinit var scheduleTimeId: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +48,7 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
         dataSet = mutableListOf()
 
         // 어댑터 초기화
-        adapter = ScheduleItemAdapter(requireContext(), dataSet)
+        adapter = daySection?.let { ScheduleItemAdapter(requireContext(), dataSet, userId, travelListId, it ) }!!
         recyclerView.adapter = adapter
 
         // 저장 버튼 클릭 이벤트 설정
@@ -75,8 +76,8 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
         return view
     }
 
+    // 수정된 fetchScheduleList 함수
     private fun fetchScheduleList(daySection: String?) {
-
         daySection?.let {
             FirebaseDatabase.getInstance().reference
                 .child("TravelList").child(userId).child(travelListId).child("schedule").child(it)
@@ -89,14 +90,14 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
                     for (childSnapshot in snapshot.children) {
                         val startTime = childSnapshot.child("startTime").getValue(Long::class.java)
                         val endTime = childSnapshot.child("endTime").getValue(Long::class.java)
-                        val scheduleText =
-                            childSnapshot.child("scheduleText").getValue(String::class.java)
+                        val scheduleText = childSnapshot.child("scheduleText").getValue(String::class.java)
 
                         showToast("$startTime")
                         // startTime이 null이 아닌 경우에만 처리
                         startTime?.let {
+                            // childSnapshot의 키를 scheduleTimeId로 사용
                             val scheduleItem = if (endTime != null) {
-                                ScheduleData(it, endTime, scheduleText)
+                                ScheduleData(it, endTime, scheduleText, childSnapshot.key ?: "")
                             } else {
                                 null // endTime이 null이면 null을 반환
                             }

@@ -6,8 +6,10 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,11 @@ import com.example.traveltaleproject.models.Check
 import com.example.traveltaleproject.models.ScheduleData
 
 
-class ScheduleItemAdapter(private val context: Context?, private var dataSet: MutableList<ScheduleData>) :
+class ScheduleItemAdapter(private val context: Context?,
+                          private var dataSet: MutableList<ScheduleData>,
+                          private val userId: String,
+                          private val travelListId: String,
+                          private val daySection: String) :
     RecyclerView.Adapter<ScheduleItemAdapter.ScheduleViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -73,6 +79,14 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Mu
 
         // schedule_text
         holder.scheduleText.text = "${item.scheduleText}"
+
+        holder.editBtn.setOnClickListener {
+            showEditModal(item)
+        }
+
+        holder.deleteBtn.setOnClickListener {
+
+        }
     }
 
     private fun calculateHeightForItem(startTime: Int, endTime: Int): Int {
@@ -87,16 +101,12 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Mu
         return (timeSlotHeightPixels * duration).toInt()
     }
 
-    private fun calculateHeightForItem2(startTime: Int, endTime: Int): Int {
-        // 시간 간격에 따라 높이 계산
-        val timeSlotHeightDp = 50 // 1시간 당 높이 (dp)
-        val timeSlotHeightPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            timeSlotHeightDp.toFloat(),
-            Resources.getSystem().displayMetrics
-        )
-        val duration = endTime - startTime
-        return (timeSlotHeightPixels * duration).toInt()
+    private fun showEditModal(item: ScheduleData) {
+        context?.let { ctx ->
+            val dialog = CustomModal(ctx, daySection, travelListId, userId)
+            dialog.setScheduleData(item) // 해당 아이템의 정보를 모달창에 전달
+            dialog.show()
+        }
     }
 
     inner class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -105,6 +115,8 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Mu
         val cardView: CardView by lazy { view.findViewById<CardView>(R.id.schedule_txt_cardview) }
         val timeText: RelativeLayout by lazy { view.findViewById<RelativeLayout>(R.id.time_txt) }
         val scheduleText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_txt) }
+        val editBtn: ImageButton by lazy { view.findViewById<ImageButton>(R.id.edit_btn) }
+        val deleteBtn: ImageButton by lazy { view.findViewById<ImageButton>(R.id.delete_btn) }
     }
 
     fun setData(newDataList: MutableList<ScheduleData>) {

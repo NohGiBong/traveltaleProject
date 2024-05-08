@@ -15,6 +15,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class TaleWriteActivity : AppCompatActivity() {
@@ -68,15 +71,19 @@ class TaleWriteActivity : AppCompatActivity() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val title = snapshot.child("title").value.toString()
-                val startDate = snapshot.child("startDate").value.toString()
-                val endDate = snapshot.child("endDate").value.toString()
+                val startDate = snapshot.child("startDate").value as Long
+                val endDate = snapshot.child("endDate").value as Long
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
                 // 가져온 데이터를 바인딩에 설정
                 binding.taleWriteTitle.setText(title)
-                binding.startDateTxt.setText(startDate)
-                binding.endDateTxt.setText(endDate)
+                val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
+                val formattedStartDate = sdf.format(Date(startDate))
+                val formattedEndDate = sdf.format(Date(endDate))
+
+                binding.startDateTxt.text = formattedStartDate
+                binding.endDateTxt.text = formattedEndDate
                 binding.mapTxt.setText(address)
 
                 Picasso.get().load(travelImage).into(binding.mainImg)

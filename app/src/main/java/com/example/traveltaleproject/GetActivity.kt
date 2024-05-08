@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class GetActivity : AppCompatActivity() {
@@ -40,7 +41,8 @@ class GetActivity : AppCompatActivity() {
         binding = ActivityGetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val dateEditText = findViewById<TextView>(R.id.date_txt)
+        val startDateTxt = findViewById<TextView>(R.id.start_date_txt)
+        val endDateTxt = findViewById<TextView>(R.id.start_date_txt)
 
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker = builder.build()
@@ -57,7 +59,8 @@ class GetActivity : AppCompatActivity() {
             val formattedStartDate = sdf.format(startDate.time)
             val formattedEndDate = sdf.format(endDate.time)
 
-            dateEditText.setText("$formattedStartDate - $formattedEndDate")
+            startDateTxt.text = formattedStartDate
+            endDateTxt.text = formattedEndDate
         }
 
         val datePickerButton = findViewById<ImageButton>(R.id.date_btn)
@@ -142,7 +145,7 @@ class GetActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
 
-        // 여행 일정 제목 변
+        // 여행 일정 제목 변경
         setUpTitle()
 
         // 여행 일정 날짜 변경
@@ -153,13 +156,21 @@ class GetActivity : AppCompatActivity() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val title = snapshot.child("title").value.toString()
-                val date = snapshot.child("date").value.toString()
+                val startDate = snapshot.child("startDate").value as Long
+                val endDate = snapshot.child("endDate").value as Long
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
                 // 가져온 데이터를 바인딩에 설정
                 binding.getTitle.setText(title)
-                binding.dateTxt.setText(date)
+
+                val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
+                val formattedStartDate = sdf.format(Date(startDate))
+                val formattedEndDate = sdf.format(Date(endDate))
+
+                binding.startDateTxt.text = formattedStartDate
+                binding.endDateTxt.text = formattedEndDate
+
                 binding.mapTxt.setText(address)
 
                 Picasso.get().load(travelImage).into(binding.mainImg)

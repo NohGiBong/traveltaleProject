@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,11 +32,15 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScheduleBinding
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userId: String
+    private lateinit var travelListId: String
 
     private lateinit var startDateTxt: TextView
     private lateinit var endDateTxt: TextView
     private lateinit var scheduleDayList: MutableList<String>
     private lateinit var adapter: ScheduleDayToDayAdapter
+    private lateinit var fragmentView: FrameLayout
+    private var selectedDate: String? = null
+    private var isDataSavedToDatabase = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +53,7 @@ class ScheduleActivity : AppCompatActivity() {
         userId = getSessionId()
 
         // Intent로 전달된 TravelListId 가져오기
-        val travelListId = intent.getStringExtra("travelListId") ?: ""
+        travelListId = intent.getStringExtra("travelListId") ?: ""
 
         // Firebase Database의 Reference 설정
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
@@ -59,13 +64,52 @@ class ScheduleActivity : AppCompatActivity() {
         val recyclerView = binding.scheduleDayItem
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+        fragmentView = binding.fragmentView
         scheduleDayList = mutableListOf<String>()
         adapter = ScheduleDayToDayAdapter(scheduleDayList)
-        adapter.setFragmentManager(supportFragmentManager) // Activity에서 사용하는 경우
+        adapter.setOnItemClickListener(object : ScheduleDayToDayAdapter.OnItemClickListener {
+            override fun onItemClick(date: String) {
+                // 클릭한 아이템의 날짜를 전달하여 프래그먼트 생성
+                showFragmentForDate(date)
+            }
+        })
         recyclerView.adapter = adapter
 
         startDateTxt = binding.startDateTxt
         endDateTxt = binding.endDateTxt
+
+        val dateBtn = binding.dateBtn
+        dateBtn.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.dateRangePicker()
+
+            // 현재 선택된 시작 날짜와 종료 날짜를 기본으로 설정
+            builder.setSelection(
+                androidx.core.util.Pair(
+                    startDate.timeInMillis,
+                    endDate.timeInMillis
+                )
+            )
+
+            val picker = builder.build()
+            picker.show(supportFragmentManager, picker.toString())
+
+            picker.addOnPositiveButtonClickListener { selection ->
+                val startDateMillis = selection.first ?: return@addOnPositiveButtonClickListener
+                val endDateMillis = selection.second ?: return@addOnPositiveButtonClickListener
+
+                val startCalendar = Calendar.getInstance().apply { timeInMillis = startDateMillis }
+                val endCalendar = Calendar.getInstance().apply { timeInMillis = endDateMillis }
+
+                // applyDateRangePicker 메서드 호출
+                applyDateRangePicker(startCalendar, endCalendar)
+
+                // 데이터가 변경되었음을 표시
+                isDataSavedToDatabase = true
+
+                // 변경된 스케줄을 데이터베이스에 저장
+                addNewFragmentsToDatabase()
+            }
+        }
 
         // BottomNavigationHelper 초기화
         bottomNavigationHelper = BottomNavigationHelper(this, this)
@@ -76,11 +120,17 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun fetchDateFromDB() {
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList").child(userId).child(travelListId)
+
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val startDate = snapshot.child("startDate").value as Long
                     val endDate = snapshot.child("endDate").value as Long
+
+                    // DB에 travelListId에 schedule 경로가 있으면 프래그먼트 식별자 생성 X
+                    isDataSavedToDatabase = snapshot.hasChild("schedule")
 
                     // startDate와 endDate를 Calendar 객체로 변환
                     val startCalendar = Calendar.getInstance().apply { timeInMillis = startDate }
@@ -88,6 +138,8 @@ class ScheduleActivity : AppCompatActivity() {
 
                     // DateRangePicker에 startDate와 endDate 적용
                     applyDateRangePicker(startCalendar, endCalendar)
+                } else {
+                    isDataSavedToDatabase = false
                 }
             }
 
@@ -118,9 +170,6 @@ class ScheduleActivity : AppCompatActivity() {
         // 밀리초를 일로 변환
         val differenceInDays: Long = (differenceInMillis / (1000 * 60 * 60 * 24)) + 1
 
-        // 토스트로 기간 출력
-        showToast("기간 출력 : $differenceInDays.toString()")
-
         // Adapter에 데이터 추가 및 갱신
         scheduleDayList.clear()
         for (i in 1..differenceInDays) {
@@ -132,8 +181,11 @@ class ScheduleActivity : AppCompatActivity() {
         showSchedulePeriod()
 
         // 선택된 날짜에 따라 자동으로 프래그먼트 표시
-        val selectedDate = sdf.format(startDate.time)
-        showFragmentForDate(selectedDate)
+        selectedDate = null // 선택된 날짜 초기화
+
+        if (!isDataSavedToDatabase) {
+            addNewFragmentsToDatabase()
+        }
     }
 
     // 캘린더 선택 이벤트 발생 시 호출되는 함수
@@ -141,14 +193,80 @@ class ScheduleActivity : AppCompatActivity() {
         binding.schedulePeriod.visibility = View.VISIBLE
     }
 
-    // showFragmentForDate 함수 추가
+    // showFragmentForDate
     private fun showFragmentForDate(date: String) {
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         val fragment = ScheduleFragment.newInstance(date)
-        transaction.replace(binding.fragmentView.id, fragment)
+        transaction.replace(fragmentView.id, fragment)
         transaction.commit()
     }
+
+    private fun addNewFragmentsToDatabase() {
+        // 최상위 노드 참조
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId).child("schedule")
+
+        // 이전 스케줄 데이터 삭제를 위한 쿼리
+        val removeQuery = databaseReference.orderByKey().limitToFirst(1)
+
+        // 이전 스케줄 데이터 삭제
+        removeQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // 이전 스케줄 데이터가 있는지 확인
+                if (snapshot.exists()) {
+                    databaseReference.removeValue()
+                        .addOnSuccessListener {
+                            // 이전 데이터 삭제 성공 시 새로운 스케줄 데이터 추가
+                            for ((index, day) in scheduleDayList.withIndex()) {
+                                val daySection = "${index + 1}일차"
+
+                                // 해당 날짜에 대한 데이터 생성
+                                val fragmentData = HashMap<String, Any>()
+                                fragmentData["daysection"] = daySection
+
+                                // 데이터베이스에 새로운 스케줄 추가
+                                databaseReference.child(daySection).setValue(fragmentData)
+                                    .addOnSuccessListener {
+                                        // 성공적으로 추가된 경우 아무것도 하지 않음
+                                    }
+                                    .addOnFailureListener {
+                                        // 실패한 경우 에러 처리
+                                        showToast("Failed to add new schedule data.")
+                                    }
+                            }
+                        }
+                        .addOnFailureListener {
+                            // 이전 데이터 삭제 실패 시 에러 처리
+                            showToast("Failed to remove previous schedule data.")
+                        }
+                } else {
+                    // 이전 스케줄 데이터가 없는 경우 바로 새로운 스케줄 데이터 추가
+                    for ((index, day) in scheduleDayList.withIndex()) {
+                        val daySection = "day${index + 1}"
+
+                        // 해당 날짜에 대한 데이터 생성
+                        val fragmentData = HashMap<String, Any>()
+                        fragmentData["daysection"] = daySection
+
+                        // 데이터베이스에 새로운 스케줄 추가
+                        databaseReference.child(daySection).setValue(fragmentData)
+                            .addOnSuccessListener {
+                                // 성공적으로 추가된 경우 아무것도 하지 않음
+                            }
+                            .addOnFailureListener {
+                                // 실패한 경우 에러 처리
+                                showToast("Failed to add new schedule data.")
+                            }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 쿼리 취소 시 처리
+            }
+        })
+    }
+
 
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()

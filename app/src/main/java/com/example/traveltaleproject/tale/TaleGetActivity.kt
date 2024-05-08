@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTaleGetBinding
-import com.example.traveltaleproject.databinding.ActivityTaleWriteBinding
 import com.example.traveltaleproject.models.TaleData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,6 +17,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TaleGetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTaleGetBinding
@@ -30,14 +31,12 @@ class TaleGetActivity : AppCompatActivity() {
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 데이터 초기화
         val travelListId = intent.getStringExtra("travelListId") ?: ""
         val taleData = intent.getParcelableExtra<TaleData>("taleData")
-
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         userId = getSessionId()
-
         binding.taleGet.text = taleData?.text?: ""
-
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
 
         // 데이터 가져오기
@@ -51,6 +50,7 @@ class TaleGetActivity : AppCompatActivity() {
             finish()
         }
 
+        // 메뉴 버튼 구현
         with(binding) {
             menuBtn.setOnClickListener {
                 val popupMenu = PopupMenu(this@TaleGetActivity, it)
@@ -59,14 +59,15 @@ class TaleGetActivity : AppCompatActivity() {
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.action_edit -> {
-                            val intent = Intent(this@TaleGetActivity, TaleEditActivity::class.java)
+                            val intent = Intent(this@TaleGetActivity, TaleWriteActivity::class.java)
+
                             if (taleData != null) {
                                 // 수정할 데이터의 고유 ID 전달
                                 intent.putExtra("talesid", taleData.talesid)
+                                intent.putExtra("travelListId", travelListId)
                             }
                             startActivity(intent)
                             finish()
-
                             Toast.makeText(this@TaleGetActivity, "수정 클릭", Toast.LENGTH_SHORT).show()
                         }
                         R.id.action_delete -> {
@@ -92,19 +93,21 @@ class TaleGetActivity : AppCompatActivity() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val title = snapshot.child("title").value.toString()
-                val startDate = snapshot.child("startDate").value.toString()
-                val endDate = snapshot.child("endDate").value.toString()
+                val startDate = snapshot.child("startDate").value as Long
+                val endDate = snapshot.child("endDate").value as Long
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
                 // 가져온 데이터를 바인딩에 설정
                 binding.taleGetTitle.setText(title)
-                binding.startDateTxt.setText(startDate)
-                binding.endDateTxt.setText(endDate)
+                val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
+                val formattedStartDate = sdf.format(Date(startDate))
+                val formattedEndDate = sdf.format(Date(endDate))
+
+                binding.startDateTxt.text = formattedStartDate
+                binding.endDateTxt.text = formattedEndDate
                 binding.mapTxt.setText(address)
-
                 Picasso.get().load(travelImage).into(binding.mainImg)
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -113,6 +116,7 @@ class TaleGetActivity : AppCompatActivity() {
         })
     }
 
+    // 사용자 정보 받아오는 펑션
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()
     }

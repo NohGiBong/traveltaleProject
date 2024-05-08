@@ -31,14 +31,12 @@ class TaleGetActivity : AppCompatActivity() {
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 데이터 초기화
         val travelListId = intent.getStringExtra("travelListId") ?: ""
         val taleData = intent.getParcelableExtra<TaleData>("taleData")
-
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         userId = getSessionId()
-
         binding.taleGet.text = taleData?.text?: ""
-
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
 
         // 데이터 가져오기
@@ -52,6 +50,7 @@ class TaleGetActivity : AppCompatActivity() {
             finish()
         }
 
+        // 메뉴 버튼 구현
         with(binding) {
             menuBtn.setOnClickListener {
                 val popupMenu = PopupMenu(this@TaleGetActivity, it)
@@ -108,9 +107,7 @@ class TaleGetActivity : AppCompatActivity() {
                 binding.startDateTxt.text = formattedStartDate
                 binding.endDateTxt.text = formattedEndDate
                 binding.mapTxt.setText(address)
-
                 Picasso.get().load(travelImage).into(binding.mainImg)
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -119,6 +116,7 @@ class TaleGetActivity : AppCompatActivity() {
         })
     }
 
+    // 사용자 정보 받아오는 펑션
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()
     }

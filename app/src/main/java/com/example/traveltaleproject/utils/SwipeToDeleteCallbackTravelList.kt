@@ -2,9 +2,9 @@ package com.example.traveltaleproject.utils
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.traveltaleproject.checklist.CheckListAdapter
+import com.example.traveltaleproject.travellist.TravelListAdapter
 
-class SwipeToDeleteCallback(private val adapter: CheckListAdapter) :
+class SwipeToDeleteCallbackTravelList(private val adapter: TravelListAdapter) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     override fun onMove(
@@ -17,10 +17,6 @@ class SwipeToDeleteCallback(private val adapter: CheckListAdapter) :
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        if (adapter.canSwipeItem(position)) {
-            adapter.removeEmptyItem(position)
-        } else {
-            adapter.notifyItemChanged(position) // 스와이프를 취소하고 아이템을 다시 보이게 합니다.
-        }
+        adapter.deleteItem(position)
     }
 }

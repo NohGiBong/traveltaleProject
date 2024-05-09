@@ -124,7 +124,7 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
 
             // 삭제 이미지 버튼 클릭 시 이벤트
             deleteBtn.setOnClickListener {
-                val deleteModal = ChecklistRemoveModal(itemView.context) {
+                val deleteModal = CheckListRemoveModal(itemView.context) {
                     deleteItem(check.checkid, position)
                 }
                 deleteModal.show()
@@ -253,7 +253,6 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
     }
 
 
-    // 데이터 추가 메서드
     // 데이터 추가 메서드
     fun addData(newItem: Check) {
         dataList.add(newItem)

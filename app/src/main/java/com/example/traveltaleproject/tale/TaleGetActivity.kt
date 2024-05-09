@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTaleGetBinding
 import com.example.traveltaleproject.models.TaleData
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -26,6 +28,7 @@ class TaleGetActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userId: String
+    private lateinit var bottomNavigationHelper: BottomNavigationHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
@@ -82,6 +85,13 @@ class TaleGetActivity : AppCompatActivity() {
                 popupMenu.show()
             }
         }
+
+        // BottomNavigationHelper 초기화
+        bottomNavigationHelper = BottomNavigationHelper(this, this)
+
+        // 네비게이션 뷰의 아이템 선택 리스너 설정
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 
     private fun fetchTravelListData() {

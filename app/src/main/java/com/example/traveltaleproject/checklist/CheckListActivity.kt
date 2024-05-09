@@ -13,7 +13,7 @@ import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityChecklistBinding
 import com.example.traveltaleproject.models.Check
-import com.example.traveltaleproject.utils.SwipeToDeleteCallback
+import com.example.traveltaleproject.utils.SwipeToDeleteCallbackCheckList
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
@@ -69,15 +69,14 @@ class CheckListActivity : AppCompatActivity() {
         bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
 
         // 빈 아이템 스와이프 삭제 기능 추가
-        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter))
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallbackCheckList(adapter))
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     // CheckList 데이터 뿌리기
     private fun fetchCheckListData() {
         val database = Firebase.database
-       // val checklistRef = database.getReference("check").child(userId).child(travelListId)
-        val checklistRef = database.getReference("TravelList").child(userId).child(travelListId ?: "").child("check")
+        val checklistRef = database.getReference("TravelList").child(userId).child(travelListId).child("check")
 
         checklistRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

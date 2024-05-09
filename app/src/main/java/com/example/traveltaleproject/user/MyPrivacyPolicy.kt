@@ -12,12 +12,12 @@ class MyPrivacyPolicy : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.closePrivacy.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }

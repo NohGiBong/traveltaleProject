@@ -11,10 +11,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.traveltaleproject.utils.PhoneTextWatcher
+import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityMyinfoBinding
 import com.example.traveltaleproject.models.Member
+import com.example.traveltaleproject.utils.PhoneTextWatcher
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -31,6 +33,8 @@ class MyInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMyinfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupBottomNavigation()
 
         databaseReference = FirebaseDatabase.getInstance().reference
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
@@ -335,5 +339,11 @@ class MyInfoActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // 하단 바 네비게이션
+    private fun setupBottomNavigation() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        BottomNavigationHelper(this, this).setupBottomNavigationListener(bottomNavigationView)
     }
 }

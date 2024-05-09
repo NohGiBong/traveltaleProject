@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.traveltaleproject.checklist.CheckListActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
 import com.example.traveltaleproject.models.TaleData
@@ -27,7 +28,6 @@ import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.HashMap
 import java.util.Locale
 
 class GetActivity : AppCompatActivity() {
@@ -52,7 +52,7 @@ class GetActivity : AppCompatActivity() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker = builder.build()
 
-        picker.addOnPositiveButtonClickListener {
+        picker.addOnPositiveButtonClickListener { it ->
             val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
             startDateIntent = startDateInMillis
             val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
@@ -63,8 +63,8 @@ class GetActivity : AppCompatActivity() {
             val startDate = Calendar.getInstance().apply { timeInMillis = startDateInMillis }
             val endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
 
-            val formattedStartDate = startDate?.let { sdf.format(it.time) }
-            val formattedEndDate = endDate?.let { sdf.format(it.time) }
+            val formattedStartDate = startDate.let { sdf.format(it.time) }
+            val formattedEndDate = endDate.let { sdf.format(it.time) }
 
             startDateTxt.text = formattedStartDate
             endDateTxt.text = formattedEndDate
@@ -180,15 +180,13 @@ class GetActivity : AppCompatActivity() {
                 }
 
                 // startDateLong과 endDateLong이 null이 아닌 경우에 대한 로직 추가
-                val startDate = startDateLong
-                val endDate = endDateLong
 
                 // 가져온 데이터를 바인딩에 설정
-                binding.getTitle.text.toString()
+                binding.getTitle.setText(title)
 
                 val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
-                val formattedStartDate = sdf.format(startDate)
-                val formattedEndDate = sdf.format(endDate)
+                val formattedStartDate = sdf.format(startDateLong)
+                val formattedEndDate = sdf.format(endDateLong)
 
                 binding.startDateTxt.text = formattedStartDate
                 binding.endDateTxt.text = formattedEndDate
@@ -245,9 +243,9 @@ class GetActivity : AppCompatActivity() {
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
         }
 
         dialog.show()
@@ -287,7 +285,7 @@ class GetActivity : AppCompatActivity() {
                 databaseReference.child("date").setValue("$formattedStartDate - $formattedEndDate")
 
                 // 성공적으로 이전 스케줄 데이터가 삭제된 경우에만 새로운 스케줄 데이터 추가
-                for ((index, day) in scheduleDayList.withIndex()) {
+                for ((index, _) in scheduleDayList.withIndex()) {
                     val daySection = "day${index + 1}"
 
                     // 해당 날짜에 대한 데이터 생성

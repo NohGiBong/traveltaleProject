@@ -3,11 +3,14 @@ package com.example.traveltaleproject.tale
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.R
@@ -32,6 +35,7 @@ class TaleGetActivity : AppCompatActivity() {
     private lateinit var travelListId: String
     private var taleData: TaleData? = null
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
@@ -45,11 +49,12 @@ class TaleGetActivity : AppCompatActivity() {
     }
 
     // 데이터 초기화
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun initializeData() {
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         userId = getSessionId()
         travelListId = intent.getStringExtra("travelListId") ?: ""
-        taleData = intent.getParcelableExtra("taleData")
+        taleData = intent.getParcelableExtra("taleData", TaleData::class.java)
         binding.taleGet.text = taleData?.text ?: ""
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
     }
@@ -96,15 +101,15 @@ class TaleGetActivity : AppCompatActivity() {
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
         }
 
         dialog.show()
     }
 
-    // 삭제 선택 시 삭제
+    // 경고창에서 삭제 선택 시
     private fun deleteTale() {
         taleData?.talesid?.let { talesId ->
             databaseReference.child("tales").child(talesId).removeValue()

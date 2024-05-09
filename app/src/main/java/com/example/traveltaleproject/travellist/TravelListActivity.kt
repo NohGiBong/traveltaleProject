@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.traveltaleproject.BottomNavigationHelper
@@ -35,7 +34,9 @@ class TravelListActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         userId = getSessionId()
 
-        databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId ?: "")
+        databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(
+            userId
+        )
 
         binding.itemAddBtn.setOnClickListener {
             val intent = Intent(this, TravelAddActivity::class.java)
@@ -85,9 +86,5 @@ class TravelListActivity : AppCompatActivity() {
 
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

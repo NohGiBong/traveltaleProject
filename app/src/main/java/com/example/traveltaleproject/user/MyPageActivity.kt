@@ -29,10 +29,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.LoginActivity
-
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityMypageBinding
 import com.example.traveltaleproject.models.Member
@@ -50,6 +48,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -63,7 +62,7 @@ class MyPageActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
     private lateinit var selectedImageUri: Uri
-    private var MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101
+    private var readExternalStoragePermissionsRequest = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,9 +100,9 @@ class MyPageActivity : AppCompatActivity() {
 
             dialog.setOnShowListener {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                    .setTextColor(resources.getColor(R.color.black))
+                    .setTextColor(ContextCompat.getColor(this, R.color.black))
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                    .setTextColor(resources.getColor(R.color.black))
+                    .setTextColor(ContextCompat.getColor(this, R.color.black))
             }
 
             dialog.show()
@@ -124,7 +123,7 @@ class MyPageActivity : AppCompatActivity() {
         // 개인 정보 관리 버튼 클릭
         binding.myinfoBtn.setOnClickListener {
             val intent = Intent(this, MyInfoActivity::class.java)
-            val userId = sharedPreferences.getString("user_id", "")
+            sharedPreferences.getString("user_id", "")
             intent.putExtra("user_id", userId)
             startActivity(intent)
         }
@@ -151,7 +150,7 @@ class MyPageActivity : AppCompatActivity() {
     private fun changeProfileImage() {
         if (ContextCompat.checkSelfPermission(this@MyPageActivity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
             // 권한이 없다면 사용자에게 권한 요청
-            ActivityCompat.requestPermissions(this@MyPageActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+            ActivityCompat.requestPermissions(this@MyPageActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), readExternalStoragePermissionsRequest)
         } else {
             // 권한이 이미 허용되었다면 앨범 열기
             openGallery()
@@ -176,7 +175,7 @@ class MyPageActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+        if (requestCode == readExternalStoragePermissionsRequest) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery()
             } else {
@@ -202,9 +201,9 @@ class MyPageActivity : AppCompatActivity() {
             val imageRef = storageRef.child("profile_images/$userId/$userId.jpg")
 
             // 선택한 이미지의 Uri를 사용하여 이미지 업로드
-            selectedImageUri?.let { uri ->
+            selectedImageUri.let { uri ->
                 imageRef.putFile(uri)
-                    .addOnSuccessListener { taskSnapshot ->
+                    .addOnSuccessListener {
                         // 업로드 성공 시 다운로드 URL 가져오기
                         imageRef.downloadUrl.addOnSuccessListener { uri ->
                             val downloadUrl = uri.toString()
@@ -233,10 +232,10 @@ class MyPageActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("로그아웃")
             .setMessage("로그아웃 하시겠습니까?")
-            .setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
+            .setPositiveButton("확인") { _: DialogInterface, _: Int ->
                 loginTypeConfirm()
             }
-            .setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
+            .setNegativeButton("취소") { _: DialogInterface, _: Int ->
                 // 취소 버튼 클릭 시 아무 동작 없음
             }
 
@@ -244,9 +243,9 @@ class MyPageActivity : AppCompatActivity() {
 
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                .setTextColor(resources.getColor(R.color.black))
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
         }
 
         dialog.show()
@@ -326,6 +325,7 @@ class MyPageActivity : AppCompatActivity() {
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getInfoFromDB(userId: String, databaseReference: DatabaseReference) {
         val userRef = databaseReference.child("Member").child(userId)
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {

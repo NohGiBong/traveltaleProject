@@ -1,5 +1,6 @@
 package com.example.traveltaleproject.travellist
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
@@ -92,6 +93,7 @@ class GoogleMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun addSaveButton(position: LatLng) {
         saveButton = Button(this)
         saveButton.text = "Save"

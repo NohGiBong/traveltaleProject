@@ -167,7 +167,7 @@ class GetActivity : AppCompatActivity() {
         // Firebase Database의 Reference 설정
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.child("title").value.toString()
+                val title = snapshot.child("title").value.toString()
                 val startDateLong = snapshot.child("startDate").value as? Long
                 val endDateLong = snapshot.child("endDate").value as? Long
                 val address = snapshot.child("address").value.toString()
@@ -182,7 +182,7 @@ class GetActivity : AppCompatActivity() {
                 // startDateLong과 endDateLong이 null이 아닌 경우에 대한 로직 추가
 
                 // 가져온 데이터를 바인딩에 설정
-                binding.getTitle.text.toString()
+                binding.getTitle.setText(title)
 
                 val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
                 val formattedStartDate = sdf.format(startDateLong)

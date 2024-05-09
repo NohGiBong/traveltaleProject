@@ -37,12 +37,12 @@
                     />
                 <!-- item 메뉴 -->
                 <ImageButton
-                    android:id="@+id/item_menu"
+                    android:id="@+id/item_del"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="5dp"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/menu_btn1"/>
+                    android:background="@drawable/trash"/>
 
                 <LinearLayout
                     android:id="@+id/date_txt_layout"

@@ -20,8 +20,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.traveltaleproject.BottomNavigationHelper
+import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTraveladdBinding
 import com.example.traveltaleproject.models.TravelList
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -38,6 +41,7 @@ class TravelAddActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var selectedImageUri: Uri
     private var readExternalStoragePermissionsRequest = 101
+    private lateinit var bottomNavigationHelper: BottomNavigationHelper
 
     private var startDateIntent: Long? = null
     private var endDateIntent: Long? = null
@@ -109,7 +113,15 @@ class TravelAddActivity : AppCompatActivity() {
             submitBtn.setOnClickListener {
                 saveTravelList()
             }
+
         }
+
+        // BottomNavigationHelper 초기화
+        bottomNavigationHelper = BottomNavigationHelper(this, this)
+
+        // 네비게이션 뷰의 아이템 선택 리스너 설정
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

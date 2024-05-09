@@ -42,7 +42,7 @@
                     android:layout_height="20dp"
                     android:layout_marginLeft="5dp"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/trash"/>
+                    android:background="@drawable/share"/>
 
                 <LinearLayout
                     android:id="@+id/date_txt_layout"

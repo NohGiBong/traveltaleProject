@@ -43,7 +43,7 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
 
         override fun onClick(view: View?) {
             // 현재 아이템의 TravelListId를 가져옴
-            val itemId = travelList[adapterPosition].travelListId
+            val itemId = travelList[bindingAdapterPosition].travelListId
 
             // GetActivity로 이동하기 위한 Intent 생성
             val intent = Intent(context, GetActivity::class.java).apply {
@@ -58,7 +58,7 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
         private fun showDeleteDialog() {
             val builder = AlertDialog.Builder(context)
             builder.setMessage("정말로 삭제하시겠습니까?")
-                .setPositiveButton("삭제") { _, _ -> deleteItem(position) }
+                .setPositiveButton("삭제") { _, _ -> deleteItem(bindingAdapterPosition) }
                 .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
 
             val dialog = builder.create()
@@ -73,7 +73,6 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
             dialog.show()
         }
 
-
         private fun deleteItem(position: Int) {
             if (position < 0 || position >= travelList.size) {
                 Toast.makeText(context, "Invalid position", Toast.LENGTH_SHORT).show()
@@ -82,32 +81,31 @@ class TravelListAdapter(private val context: Context, private val travelList: Mu
             }
             val travel = travelList[position]
 
-            // Delete the item from the database
+            // DB에서 아이템 삭제 기능
             FirebaseDatabase.getInstance().reference.child("TravelList")
                 .child(userId)
                 .child(travel.travelListId)
                 .removeValue()
                 .addOnSuccessListener {
-                    // Displaying a toast message to indicate successful deletion
+                    // 삭제 성공 시 토스트
                     Toast.makeText(context, "트레블 삭제 완료", Toast.LENGTH_SHORT).show()
 
-                    // Check again if the position is still valid
-                    if (position < 0 || position >= travelList.size) {
+                    // 아이템 위치 유효성 확인
+                    if (position >= travelList.size) {
                         Log.e("TravelListAdapter", "Position became invalid after deletion: $position, List size: ${travelList.size}")
                         return@addOnSuccessListener
                     }
 
-                    // Remove the item from the 'travelList' and notify the adapter
+                    // 아이템 삭제 후 어댑터 갱신
                     travelList.removeAt(position)
                     notifyItemRemoved(position)
                     notifyItemRangeChanged(position, itemCount)
                 }
                 .addOnFailureListener { e ->
-                    // Displaying a toast message to indicate failure in deletion
+                    // 삭제 실패 시 토스트
                     Toast.makeText(context, "트레블 삭제 살패${e.message}", Toast.LENGTH_LONG).show()
                 }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelListViewHolder {

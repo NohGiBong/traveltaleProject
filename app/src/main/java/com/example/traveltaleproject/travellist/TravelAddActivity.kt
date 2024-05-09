@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -21,16 +20,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import com.example.traveltaleproject.databinding.ActivityTraveladdBinding
 import com.example.traveltaleproject.models.TravelList
-import com.example.traveltaleproject.user.MyPageActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.UUID
 
 
 class TravelAddActivity : AppCompatActivity() {
@@ -38,7 +37,7 @@ class TravelAddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTraveladdBinding
     private lateinit var databaseReference: DatabaseReference
     private lateinit var selectedImageUri: Uri
-    private var MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101
+    private var readExternalStoragePermissionsRequest = 101
 
     private var startDateIntent: Long? = null
     private var endDateIntent: Long? = null
@@ -49,7 +48,7 @@ class TravelAddActivity : AppCompatActivity() {
 
         // SharedPreferences 초기화
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("user_id", "")
+        sharedPreferences.getString("user_id", "")
 
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList")
 
@@ -96,7 +95,7 @@ class TravelAddActivity : AppCompatActivity() {
             imgAdd.setOnClickListener {
                 if (ContextCompat.checkSelfPermission(this@TravelAddActivity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                     // 권한이 없다면 사용자에게 권한 요청
-                    ActivityCompat.requestPermissions(this@TravelAddActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+                    ActivityCompat.requestPermissions(this@TravelAddActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), readExternalStoragePermissionsRequest)
                 } else {
                     // 권한이 이미 허용되었다면 앨범 열기
                     openGallery()
@@ -129,7 +128,7 @@ class TravelAddActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+        if (requestCode == readExternalStoragePermissionsRequest) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery()
             } else {
@@ -166,7 +165,7 @@ class TravelAddActivity : AppCompatActivity() {
             // Firebase Storage에 이미지 업로드
             val storageReference = FirebaseStorage.getInstance().reference.child(imageName)
             storageReference.putFile(selectedImageUri)
-                .addOnSuccessListener { taskSnapshot ->
+                .addOnSuccessListener {
                     // 이미지 업로드 성공 시, 다운로드 URL 가져오기
                     storageReference.downloadUrl.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
@@ -207,8 +206,4 @@ class TravelAddActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    companion object {
-        private val IMAGE_PICK_CODE = 1000
-        private val PERMISSION_CODE = 1001
-    }
 }

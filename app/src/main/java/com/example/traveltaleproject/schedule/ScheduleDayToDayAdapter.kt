@@ -1,14 +1,9 @@
 package com.example.traveltaleproject.schedule
 
 import android.graphics.Typeface
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleDayItemBinding
@@ -19,6 +14,7 @@ class ScheduleDayToDayAdapter(
     private var scheduleDayList: MutableList<String>
 ) : RecyclerView.Adapter<ScheduleDayToDayAdapter.MyViewHolder>() {
     private var selectedPosition: String? = null
+
     interface OnItemClickListener {
         fun onItemClick(date: String)
     }
@@ -29,6 +25,11 @@ class ScheduleDayToDayAdapter(
     // 외부에서 클릭 리스너 설정 메서드
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.itemClickListener = listener
+    }
+
+    fun setSelectedItem(date: String?) {
+        selectedPosition = date
+        notifyDataSetChanged()
     }
 
     inner class MyViewHolder(private val binding: ActivityScheduleDayItemBinding) :
@@ -73,8 +74,8 @@ class ScheduleDayToDayAdapter(
                 setTypeface(null, Typeface.NORMAL)
             }
         }
-
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ActivityScheduleDayItemBinding.inflate(
@@ -109,6 +110,7 @@ class ScheduleDayToDayAdapter(
             notifyDataSetChanged()
         }
     }
+
 }
 
 

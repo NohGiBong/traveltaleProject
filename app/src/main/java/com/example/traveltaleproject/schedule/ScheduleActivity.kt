@@ -5,12 +5,12 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityScheduleBinding
@@ -23,8 +23,6 @@ import java.util.*
 
 class ScheduleActivity : AppCompatActivity() {
 
-    private lateinit var startDate: Calendar
-    private lateinit var endDate: Calendar
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
     private lateinit var binding: ActivityScheduleBinding
@@ -32,11 +30,13 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var userId: String
     private lateinit var travelListId: String
 
+    private lateinit var startDate: Calendar
+    private lateinit var endDate: Calendar
     private lateinit var startDateTxt: TextView
     private lateinit var endDateTxt: TextView
     private lateinit var scheduleDayList: MutableList<String>
     private lateinit var adapter: ScheduleDayToDayAdapter
-    private lateinit var fragmentView: FrameLayout
+    private lateinit var fragmentView: ViewGroup
     private var selectedDate: String? = null
     private var isDataSavedToDatabase = true
 
@@ -45,7 +45,6 @@ class ScheduleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -62,11 +61,11 @@ class ScheduleActivity : AppCompatActivity() {
         // 날짜 가져오기
         fetchDateFromDB()
 
-        val recyclerView = binding.scheduleDayItem
+        val recyclerView = findViewById<RecyclerView>(R.id.schedule_day_item)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        fragmentView = binding.fragmentView
-        scheduleDayList = mutableListOf<String>()
+        fragmentView = findViewById(R.id.fragment_view)
+        scheduleDayList = mutableListOf()
         adapter = ScheduleDayToDayAdapter(scheduleDayList)
         adapter.setOnItemClickListener(object : ScheduleDayToDayAdapter.OnItemClickListener {
             override fun onItemClick(date: String) {
@@ -77,10 +76,10 @@ class ScheduleActivity : AppCompatActivity() {
         })
         recyclerView.adapter = adapter
 
-        startDateTxt = binding.startDateTxt
-        endDateTxt = binding.endDateTxt
+        startDateTxt = findViewById(R.id.start_date_txt)
+        endDateTxt = findViewById(R.id.end_date_txt)
 
-        val dateBtn = binding.dateBtn
+        val dateBtn = findViewById<ImageButton>(R.id.date_btn)
         dateBtn.setOnClickListener {
             val builder = MaterialDatePicker.Builder.dateRangePicker()
 
@@ -110,6 +109,14 @@ class ScheduleActivity : AppCompatActivity() {
                 // 데이터가 변경되었음을 표시
                 isDataSavedToDatabase = true
 
+                // 모든 프래그먼트를 invisible로 설정하여 숨김
+                supportFragmentManager.fragments.forEach { fragment ->
+                    fragment.view?.visibility = View.INVISIBLE
+                }
+
+                // RecyclerView 어댑터의 선택된 스타일을 디폴트로 설정
+                adapter.setSelectedItem(null)
+
                 // 변경된 스케줄을 데이터베이스에 저장
                 addNewFragmentsToDatabase()
             }
@@ -121,10 +128,6 @@ class ScheduleActivity : AppCompatActivity() {
         // 네비게이션 뷰의 아이템 선택 리스너 설정
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
-    }
-    override fun onResume() {
-        super.onResume()
-        fetchDateFromDB()
     }
 
     private fun fetchDateFromDB() {
@@ -192,7 +195,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         // 아이템 클릭 이벤트를 액티비티로 전달
         selectedDate?.let { date ->
-            val daySection = "day${date.toInt() + 1}"
+            val daySection = "day${date.toInt()?.plus(1) ?: return@let}"
             showFragmentForDate(date, daySection)
         }
     }

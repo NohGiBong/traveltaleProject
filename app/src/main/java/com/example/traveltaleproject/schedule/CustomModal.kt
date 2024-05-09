@@ -157,7 +157,7 @@ class CustomModal(
             .child("TravelList").child(userId).child(travelListId).child("schedule")
 
         // 해당 daysection 노드에 새로운 고유한 키로 데이터 추가
-        val scheduleRef = databaseReference.child(daySection).child(scheduleTimeId).push()
+        val scheduleRef = databaseReference.child(daySection).child(scheduleTimeId)
 
         scheduleRef.setValue(scheduleData)
             .addOnSuccessListener {
@@ -170,10 +170,10 @@ class CustomModal(
 
     private fun updateScheduleData(scheduleDataToUpdate: ScheduleData) {
         val databaseReference = FirebaseDatabase.getInstance().reference
-            .child("TravelList").child(userId).child(travelListId).child("schedule")
+            .child("TravelList").child(userId).child(travelListId).child("schedule").child(daySection)
 
         // 해당 daysection 노드에 기존 데이터 업데이트
-        val scheduleRef = databaseReference.child(daySection).child(scheduleDataToUpdate.scheduleTimeId)
+        val scheduleRef = databaseReference.child(scheduleDataToUpdate.scheduleTimeId)
 
         scheduleRef.setValue(scheduleDataToUpdate)
             .addOnSuccessListener {

@@ -89,7 +89,7 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
     }
 
     // 스케줄 데이터 불러오는 메서드 수정
-    private fun fetchScheduleList(daySection: String?) {
+    public fun fetchScheduleList(daySection: String?) {
         daySection?.let {
             FirebaseDatabase.getInstance().reference
                 .child("TravelList").child(userId).child(travelListId).child("schedule").child(it)

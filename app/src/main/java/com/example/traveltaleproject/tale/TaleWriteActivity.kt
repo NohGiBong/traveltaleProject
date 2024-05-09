@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.databinding.ActivityTaleWriteBinding
 import com.example.traveltaleproject.models.TaleData
 import com.google.firebase.database.DataSnapshot
@@ -33,6 +34,12 @@ class TaleWriteActivity : AppCompatActivity() {
         setupUI()
         initializeFirebase()
         loadData()
+
+        binding.backBtn.setOnClickListener {
+            val intent = Intent(this, GetActivity::class.java)
+            intent.putExtra("travelListId", travelListId)
+            startActivity(intent)
+        }
     }
 
     // UI 데이터 받아오기

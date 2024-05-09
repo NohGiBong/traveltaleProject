@@ -9,14 +9,14 @@
     </data>
 
     <RelativeLayout
-        android:id="@+id/activity_tale_write"
+        android:id="@+id/activity_tale_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToOutline="true">
 
         <!-- 메인 이미지 -->
         <RelativeLayout
-            android:id="@+id/tale_write_img"
+            android:id="@+id/tale_edit_img"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_alignParentLeft="true"
@@ -70,7 +70,7 @@
 
         <!-- traveltale 작성 부분 -->
         <RelativeLayout
-            android:id="@+id/tale_write"
+            android:id="@+id/tale_edit"
             android:layout_width="match_parent"
             android:layout_height="520dp"
             android:layout_alignParentBottom="true"
@@ -93,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true">
                 <EditText
-                    android:id="@+id/tale_write_title"
+                    android:id="@+id/tale_edit_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -108,12 +108,12 @@
 
                 <!-- 여행 일자 수정 -->
                 <LinearLayout
-                    android:id="@+id/tale_write_date_layout"
+                    android:id="@+id/tale_edit_date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="11dp"
                     android:orientation="horizontal"
-                    android:layout_below="@+id/tale_write_title">
+                    android:layout_below="@+id/tale_edit_title">
 
                     <TextView
                         android:id="@+id/start_date_txt"
@@ -156,11 +156,11 @@
 
                 <!-- 위치 -->
                 <RelativeLayout
-                    android:id="@+id/tale_write_map"
+                    android:id="@+id/tale_edit_map"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_below="@id/tale_write_date_layout">
+                    android:layout_below="@id/tale_edit_date_layout">
                     <!-- 위치 수정 버튼 -->
                     <ImageButton
                         android:id="@+id/map_btn"
@@ -186,13 +186,13 @@
 
                 <!-- tale 본문 작성란 -->
                 <EditText
-                    android:id="@+id/taleWrite"
+                    android:id="@+id/taleEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tale_write_map"
+                    android:layout_below="@id/tale_edit_map"
                     android:layout_marginTop="20dp"
                     android:background="@android:color/transparent"
-                    android:hint="@string/tale_write_hint"
+                    android:hint="@string/tale_edit_hint"
                     android:fontFamily="@font/kanit_font"
                     android:textSize="15dp"
                     android:text="@{editTextVariable.text}"/>
@@ -216,13 +216,13 @@
                         android:layout_centerInParent="true">
                         <!-- 이미지 추가 버튼 -->
                         <ImageButton
-                            android:id="@+id/tale_write_img_add"
+                            android:id="@+id/tale_edit_img_add"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/image_add" />
                         <!-- 장소 저장 버튼 -->
                         <ImageButton
-                            android:id="@+id/tale_write_map_add"
+                            android:id="@+id/tale_edit_map_add"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginLeft="60dp"

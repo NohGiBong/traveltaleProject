@@ -2,19 +2,29 @@ package com.example.traveltaleproject.schedule
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.R
+import com.example.traveltaleproject.models.Check
+import com.example.traveltaleproject.models.ScheduleData
+import com.google.firebase.database.FirebaseDatabase
 
 
-class ScheduleItemAdapter(private val context: Context?, private var dataSet: List<CustomModal.ScheduleData>) :
+class ScheduleItemAdapter(private val context: Context?,
+                          private var dataSet: MutableList<ScheduleData>,
+                          private val userId: String,
+                          private val travelListId: String,
+                          private val daySection: String) :
     RecyclerView.Adapter<ScheduleItemAdapter.ScheduleViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -71,6 +81,29 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Li
 
         // schedule_text
         holder.scheduleText.text = "${item.scheduleText}"
+
+        holder.editBtn.setOnClickListener {
+            val dialog = context?.let { it1 ->
+                CustomModal(
+                    it1,
+                    daySection ?: "",
+                    travelListId,
+                    userId
+                )
+            }
+            dialog?.setScheduleData(item) // 수정할 일정 데이터 전달
+            dialog?.setOnDismissListener {
+                // 모달이 닫힐 때 데이터 업데이트
+                dialog.getUpdatedScheduleData()?.let { it1 -> updateDataItem(it1) }
+            }
+            dialog?.show()
+        }
+
+        holder.deleteBtn.setOnClickListener {
+            deleteItemFromDatabase(item)
+            dataSet.remove(item)
+            notifyDataSetChanged()
+        }
     }
 
     private fun calculateHeightForItem(startTime: Int, endTime: Int): Int {
@@ -85,24 +118,42 @@ class ScheduleItemAdapter(private val context: Context?, private var dataSet: Li
         return (timeSlotHeightPixels * duration).toInt()
     }
 
-    private fun calculateHeightForItem2(startTime: Int, endTime: Int): Int {
-        // 시간 간격에 따라 높이 계산
-        val timeSlotHeightDp = 50 // 1시간 당 높이 (dp)
-        val timeSlotHeightPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            timeSlotHeightDp.toFloat(),
-            Resources.getSystem().displayMetrics
-        )
-        val duration = endTime - startTime
-        return (timeSlotHeightPixels * duration).toInt()
+    fun updateDataItem(updatedItem: ScheduleData) {
+        val index = dataSet.indexOfFirst { it.scheduleTimeId == updatedItem.scheduleTimeId }
+        if (index != -1) {
+            dataSet[index] = updatedItem
+            notifyItemChanged(index)
+        }
+    }
+
+    private fun deleteItemFromDatabase(item: ScheduleData) {
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList").child(userId).child(travelListId)
+            .child("schedule").child(daySection).child(item.scheduleTimeId)
+
+        databaseReference.removeValue()
+            .addOnSuccessListener {
+                Log.d("FirebaseDB", "아이템 삭제 성공")
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirebaseDB", "아이템 삭제 실패", e)
+            }
     }
 
     inner class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val startTimeText: TextView = view.findViewById(R.id.schedule_start_time)
-        val endTimeText: TextView = view.findViewById(R.id.schedule_end_time)
-        val cardView: CardView = view.findViewById(R.id.schedule_txt_cardview)
-        val timeText:RelativeLayout = view.findViewById(R.id.time_txt)
-        val scheduleText: TextView = view.findViewById(R.id.schedule_txt)
+        val startTimeText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_start_time) }
+        val endTimeText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_end_time) }
+        val cardView: CardView by lazy { view.findViewById<CardView>(R.id.schedule_txt_cardview) }
+        val timeText: RelativeLayout by lazy { view.findViewById<RelativeLayout>(R.id.time_txt) }
+        val scheduleText: TextView by lazy { view.findViewById<TextView>(R.id.schedule_txt) }
+        val editBtn: ImageButton by lazy { view.findViewById<ImageButton>(R.id.edit_btn) }
+        val deleteBtn: ImageButton by lazy { view.findViewById<ImageButton>(R.id.delete_btn) }
+    }
+
+    fun setData(newDataList: MutableList<ScheduleData>) {
+        dataSet.clear()
+        dataSet.addAll(newDataList)
+        notifyDataSetChanged()
     }
 
 }

@@ -63,10 +63,16 @@ class TravelListActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val travelList = mutableListOf<TravelList>()
                 for (data in snapshot.children) {
-                    val travel = data.getValue(TravelList::class.java)
-                    travel?.let {
-                        travelList.add(it)
-                    }
+                    val travelListId = data.key ?: ""
+                    val title = data.child("title").getValue(String::class.java) ?: ""
+                    val date = data.child("date").getValue(String::class.java) ?: ""
+                    val address = data.child("address").getValue(String::class.java) ?: ""
+                    val travelImage = data.child("travelImage").getValue(String::class.java) ?: ""
+                    val startDate = data.child("startDate").getValue(Long::class.java) ?: 0
+                    val endDate = data.child("endDate").getValue(Long::class.java) ?: 0
+
+                    val travel = TravelList(travelListId, title, date, address, travelImage, startDate, endDate)
+                    travelList.add(travel)
                 }
                 adapter.setList(travelList)
             }

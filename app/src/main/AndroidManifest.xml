@@ -68,7 +68,10 @@
             android:name=".checklist.CheckListActivity"
             android:exported="true">
         </activity>
-
+        <activity
+            android:name=".schedule.ScheduleActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".schedule.ScheduleActivity"
             android:exported="true">

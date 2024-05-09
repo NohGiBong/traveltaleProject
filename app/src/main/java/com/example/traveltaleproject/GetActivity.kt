@@ -1,6 +1,5 @@
 package com.example.traveltaleproject
 
-import com.example.traveltaleproject.schedule.ScheduleActivity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -13,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.checklist.CheckListActivity
 import com.example.traveltaleproject.databinding.ActivityGetBinding
 import com.example.traveltaleproject.models.TaleData
+import com.example.traveltaleproject.schedule.ScheduleActivity
 import com.example.traveltaleproject.tale.TaleGetActivity
 import com.example.traveltaleproject.tale.TaleWriteActivity
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.DataSnapshot
@@ -25,6 +26,8 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.HashMap
 import java.util.Locale
 
 class GetActivity : AppCompatActivity() {
@@ -33,31 +36,41 @@ class GetActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userId: String
+    private lateinit var travelListId: String
+    private lateinit var scheduleDayList: MutableList<String>
+    private var startDateIntent: Long? = null
+    private var endDateIntent: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityGetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val dateEditText = findViewById<TextView>(R.id.date_txt)
+        val startDateTxt = findViewById<TextView>(R.id.start_date_txt)
+        val endDateTxt = findViewById<TextView>(R.id.end_date_txt)
 
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker = builder.build()
 
         picker.addOnPositiveButtonClickListener {
             val startDateInMillis = it.first ?: return@addOnPositiveButtonClickListener
+            startDateIntent = startDateInMillis
             val endDateInMillis = it.second ?: return@addOnPositiveButtonClickListener
+            endDateIntent = endDateInMillis
 
             val sdf = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH)
 
             val startDate = Calendar.getInstance().apply { timeInMillis = startDateInMillis }
             val endDate = Calendar.getInstance().apply { timeInMillis = endDateInMillis }
 
-            val formattedStartDate = sdf.format(startDate.time)
-            val formattedEndDate = sdf.format(endDate.time)
+            val formattedStartDate = startDate?.let { sdf.format(it.time) }
+            val formattedEndDate = endDate?.let { sdf.format(it.time) }
 
-            dateEditText.setText("$formattedStartDate - $formattedEndDate")
+            startDateTxt.text = formattedStartDate
+            endDateTxt.text = formattedEndDate
+
+            // 변경된 날짜를 데이터베이스에 저장
+            addNewFragmentsToDatabase()
         }
 
         val datePickerButton = findViewById<ImageButton>(R.id.date_btn)
@@ -69,7 +82,7 @@ class GetActivity : AppCompatActivity() {
         userId = getSessionId()
 
         // Intent로 전달된 TravelListId 가져오기
-        val travelListId = intent.getStringExtra("travelListId") ?: ""
+        travelListId = intent.getStringExtra("travelListId") ?: ""
 
         // Firebase Database의 Reference 설정
         databaseReference =
@@ -128,7 +141,6 @@ class GetActivity : AppCompatActivity() {
                     }
                 }
 
-
                 override fun onCancelled(databaseError: DatabaseError) {
                     // 에러 처리
                 }
@@ -142,32 +154,65 @@ class GetActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationHelper.setupBottomNavigationListener(bottomNavigationView)
 
-        // 여행 일정 제목 변
+        // 여행 일정 제목 변경
         setUpTitle()
+    }
 
-        // 여행 일정 날짜 변경
-
+    override fun onResume() {
+        super.onResume()
+        fetchTravelListData()
     }
 
     private fun fetchTravelListData() {
+        // Firebase Database의 Reference 설정
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val title = snapshot.child("title").value.toString()
-                val date = snapshot.child("date").value.toString()
+                val startDateLong = snapshot.child("startDate").value as? Long
+                val endDateLong = snapshot.child("endDate").value as? Long
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
+                // startDateLong과 endDateLong이 null인 경우에 대한 처리
+                if (startDateLong == null || endDateLong == null) {
+                    // 처리할 로직 추가
+                    return
+                }
+
+                // startDateLong과 endDateLong이 null이 아닌 경우에 대한 로직 추가
+                val startDate = startDateLong
+                val endDate = endDateLong
+
                 // 가져온 데이터를 바인딩에 설정
-                binding.getTitle.setText(title)
-                binding.dateTxt.setText(date)
-                binding.mapTxt.setText(address)
+                binding.getTitle.text.toString()
+
+                val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
+                val formattedStartDate = sdf.format(startDate)
+                val formattedEndDate = sdf.format(endDate)
+
+                binding.startDateTxt.text = formattedStartDate
+                binding.endDateTxt.text = formattedEndDate
+
+                binding.mapTxt.text = address
 
                 Picasso.get().load(travelImage).into(binding.mainImg)
 
+                // scheduleDayList 초기화
+                scheduleDayList = mutableListOf()
+                for (data in snapshot.child("schedule").children) {
+                    val day = data.child("daysection").getValue(String::class.java)
+                    day?.let {
+                        scheduleDayList.add(it)
+                    }
+                }
+
+                // 데이터를 가져온 후에 addNewFragmentsToDatabase를 호출
+                addNewFragmentsToDatabase()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // 에러 처리
+                showToast("Failed to fetch data: ${error.message}")
             }
         })
     }
@@ -207,6 +252,65 @@ class GetActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
+    private fun addNewFragmentsToDatabase() {
+        // startDate 및 endDate가 null인지 확인
+        if (startDateIntent == null || endDateIntent == null) {
+            showToast("Error: Start date or end date is null.")
+            return
+        }
+
+        // 최상위 노드 참조
+        val databaseReference = FirebaseDatabase.getInstance().reference
+            .child("TravelList")
+            .child(userId)
+            .child(travelListId)
+
+        // 이전 스케줄 데이터 삭제를 위한 쿼리
+        val removeScheduleQuery = databaseReference.child("schedule").removeValue()
+        val removeStartDateQuery = databaseReference.child("startDate").removeValue()
+        val removeEndDateQuery = databaseReference.child("endDate").removeValue()
+        val removeDateQuery = databaseReference.child("date").removeValue()
+
+        // 스케줄, 시작일, 종료일, 날짜 삭제가 모두 성공적으로 이루어지면 새로운 데이터 추가를 수행
+        val tasks = listOf(removeScheduleQuery, removeStartDateQuery, removeEndDateQuery, removeDateQuery)
+        Tasks.whenAllSuccess<Void>(tasks)
+            .addOnSuccessListener {
+                val startDateIntent = startDateIntent
+                val endDateIntent = endDateIntent
+
+                databaseReference.child("startDate").setValue(startDateIntent)
+                databaseReference.child("endDate").setValue(endDateIntent)
+
+                val formattedStartDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(startDateIntent)
+                val formattedEndDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(endDateIntent)
+                databaseReference.child("date").setValue("$formattedStartDate - $formattedEndDate")
+
+                // 성공적으로 이전 스케줄 데이터가 삭제된 경우에만 새로운 스케줄 데이터 추가
+                for ((index, day) in scheduleDayList.withIndex()) {
+                    val daySection = "day${index + 1}"
+
+                    // 해당 날짜에 대한 데이터 생성
+                    val fragmentData = HashMap<String, Any>()
+                    fragmentData["daysection"] = daySection
+
+                    // 데이터베이스에 새로운 스케줄 추가
+                    databaseReference.child("schedule").child(daySection).setValue(fragmentData)
+                        .addOnSuccessListener {
+                            // 성공적으로 추가된 경우 아무것도 하지 않음
+                        }
+                        .addOnFailureListener {
+                            // 실패한 경우 에러 처리
+                            showToast("Failed to add new schedule data.")
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                // 하나 이상의 삭제 작업이 실패한 경우
+                showToast("Failed to remove previous data: ${exception.message}")
+            }
+    }
+
 
     private fun getSessionId(): String {
         return sharedPreferences.getString("user_id", "").toString()

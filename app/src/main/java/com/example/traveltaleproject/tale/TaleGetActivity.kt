@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.PopupMenu
+import android.widget.RelativeLayout
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.traveltaleproject.BottomNavigationHelper
@@ -29,6 +32,11 @@ class TaleGetActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userId: String
     private lateinit var bottomNavigationHelper: BottomNavigationHelper
+
+    private var initialMarginTop = 180 // 초기 마진 값
+    private val maxMarginTop = 0 // 최소 마진 값
+    private lateinit var scrollView: ScrollView
+    private lateinit var taleGetBodyLayout: RelativeLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
@@ -44,6 +52,26 @@ class TaleGetActivity : AppCompatActivity() {
 
         // 데이터 가져오기
         fetchTravelListData()
+
+        // scrollView 초기화
+        scrollView = findViewById(R.id.scroll_view)
+        taleGetBodyLayout = findViewById(R.id.tale_get_body)
+
+        // ScrollView의 스크롤 이벤트 감지
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            val scrollY = scrollView.scrollY // 현재 스크롤 위치
+
+            // 초기 마진에서 현재 스크롤 위치를 빼서 새로운 마진 값을 계산
+            val newMarginTop = initialMarginTop - scrollY
+
+            // 최소 마진 값을 벗어나지 않도록 조정
+            val adjustedMarginTop = maxOf(newMarginTop, maxMarginTop)
+
+            // RelativeLayout의 LayoutParams를 가져와서 마진을 조정
+            val params = taleGetBodyLayout.layoutParams as FrameLayout.LayoutParams
+            params.topMargin = adjustedMarginTop
+            taleGetBodyLayout.layoutParams = params
+        }
 
         fun goToWriteActivity() {
             val intent = Intent(this, GetActivity::class.java)

@@ -276,14 +276,14 @@ class GetActivity : AppCompatActivity() {
         val tasks = listOf(removeScheduleQuery, removeStartDateQuery, removeEndDateQuery, removeDateQuery)
         Tasks.whenAllSuccess<Void>(tasks)
             .addOnSuccessListener {
-                val startDateIntent = startDateIntent
-                val endDateIntent = endDateIntent
+                val startDateIntent = startDateIntent ?: 0
+                val endDateIntent = endDateIntent ?: 0
 
                 databaseReference.child("startDate").setValue(startDateIntent)
                 databaseReference.child("endDate").setValue(endDateIntent)
 
-                val formattedStartDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(startDateIntent)
-                val formattedEndDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(endDateIntent)
+                val formattedStartDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(Date(startDateIntent))
+                val formattedEndDate = SimpleDateFormat("dd. MMM. yyyy", Locale.ENGLISH).format(Date(endDateIntent))
                 databaseReference.child("date").setValue("$formattedStartDate - $formattedEndDate")
 
                 // 성공적으로 이전 스케줄 데이터가 삭제된 경우에만 새로운 스케줄 데이터 추가

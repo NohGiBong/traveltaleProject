@@ -1,6 +1,9 @@
 package com.example.traveltaleproject.checklist
 
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.traveltaleproject.models.Check
 import com.example.traveltaleproject.R
@@ -101,7 +105,7 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
             editText.setOnEditorActionListener { _, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                     val newItemText = editText.text.toString()
-                    saveNewItemToDatabase(newItemText)
+                    saveNewItemToDatabase(newItemText, checkId)
                     true
                 } else {
                     false
@@ -113,17 +117,17 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
             editText.setText(check.text)
             checkId = check.checkid
 
+            // 수정 이미지 버튼 클릭 시 이벤트
             editBtn.setOnClickListener {
-                if (checkListRecyclerViewEdit.visibility == View.VISIBLE) {
-                    checkListRecyclerViewEdit.visibility = View.GONE
-                    chkImgEdit.isClickable = true
-                    editText.isEnabled = true
-                    moreBtn.isClickable = true
-                }
-                updateItemText(editText.text.toString(), position)
+                showEditModal(itemView.context, editText, position, checkId)
             }
+
+            // 삭제 이미지 버튼 클릭 시 이벤트
             deleteBtn.setOnClickListener {
-                deleteItem(check.checkid)
+                val deleteModal = ChecklistRemoveModal(itemView.context) {
+                    deleteItem(check.checkid, position)
+                }
+                deleteModal.show()
             }
 
             chkImgEdit.isEnabled = editText.text.toString().isNotEmpty()
@@ -137,12 +141,12 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
         }
     }
 
-    // RealTime DB : CheckList 저장
-    private fun saveNewItemToDatabase(newItemText: String) {
+    // RealTime DB : CheckList 추가
+    private fun saveNewItemToDatabase(newItemText: String, checkId: String?) {
         val database = Firebase.database
-        val newItemRef = database.getReference("check").child(userId).child(travelListId ?: "")
+        val newItemRef = database.getReference("TravelList").child(userId).child(travelListId ?: "").child("check")
 
-        val newItemKey = UUID.randomUUID().toString()
+        val newItemKey = checkId ?: UUID.randomUUID().toString() // 기존 checkId가 없으면 새로 생성
 
         val newItem = Check(newItemKey, newItemText)
 
@@ -155,12 +159,38 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
             }
     }
 
-    // RealTime DB : CheckList 수정
-    private fun updateItemText(newText: String, position: Int) {
-        val checkId = dataList[position].checkid
+    // 수정 모달
+    private fun showEditModal(context: Context, editText: EditText, position: Int, checkId: String) {
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val dialogView: View = inflater.inflate(R.layout.activity_checklist_editmodal, null)
+        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+        alertDialog.setView(dialogView)
+        val alertDialogInstance = alertDialog.create()
+        alertDialogInstance.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialogInstance.show()
 
+        val cancelBtn: CardView = dialogView.findViewById(R.id.check_cancle1)
+        val editBtn: CardView = dialogView.findViewById(R.id.check_edit)
+
+        cancelBtn.setOnClickListener {
+            alertDialogInstance.dismiss()
+        }
+
+        editBtn.setOnClickListener {
+            val newText = editText.text.toString()
+            if (checkId.isNotEmpty()) {
+                updateItemText(newText, checkId)
+            } else {
+                saveNewItemToDatabase(newText, null) // checkId가 없으면 새로운 아이템으로 저장
+            }
+            alertDialogInstance.dismiss()
+        }
+    }
+
+    // RealTime DB : CheckList 수정
+    private fun updateItemText(newText: String, checkId: String) {
         val database = Firebase.database
-        val itemRef = database.getReference("check").child(userId).child(travelListId ?: "").child(checkId)
+        val itemRef = database.getReference("TravelList").child(userId).child(travelListId ?: "").child("check").child(checkId)
 
         val updates: MutableMap<String, Any> = HashMap()
         updates["text"] = newText
@@ -176,9 +206,9 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
     }
 
     // RealTime DB : CheckList 삭제
-    private fun deleteItem(checkId: String) {
+    private fun deleteItem(checkId: String, position: Int) {
         val database = Firebase.database
-        val itemRef = database.getReference("check").child(userId).child(travelListId?: "").child(checkId)
+        val itemRef = database.getReference("TravelList").child(userId).child(travelListId?: "").child("check").child(checkId)
 
         itemRef.removeValue()
             .addOnSuccessListener {
@@ -194,7 +224,7 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
         val checkId = dataList[position].checkid
 
         val database = Firebase.database
-        val itemRef = database.getReference("check").child(userId).child(travelListId?: "").child(checkId)
+        val itemRef = database.getReference("TravelList").child(userId).child(travelListId?: "").child("check").child(checkId)
 
         val updates: MutableMap<String, Any> = HashMap()
         updates["status"] = status
@@ -215,14 +245,19 @@ class CheckListAdapter(private val dataList: MutableList<Check>, private val use
 
     // 비어있는 Item 스와이프로 삭제 기능
     fun removeEmptyItem(position: Int) {
-        dataList.removeAt(position)
-        notifyItemRemoved(position)
+        if (position >= 0 && position < dataList.size) {
+            dataList.removeAt(position)
+            notifyItemRemoved(position) // 이 부분이 삭제된 항목을 RecyclerView에 알리는 부분
+            notifyItemRangeChanged(position, itemCount) // 삭제된 항목 이후의 항목들의 위치를 변경 후  RecyclerView에 알리는 부분
+        }
     }
 
+
+    // 데이터 추가 메서드
     // 데이터 추가 메서드
     fun addData(newItem: Check) {
         dataList.add(newItem)
-        notifyDataSetChanged()
+        notifyItemInserted(dataList.size - 1) // 마지막 항목에 추가된 것을 알리고 RecyclerView를 업데이트
     }
 
     // 데이터 설정 메서드

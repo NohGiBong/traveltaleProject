@@ -83,7 +83,20 @@ class ScheduleItemAdapter(private val context: Context?,
         holder.scheduleText.text = "${item.scheduleText}"
 
         holder.editBtn.setOnClickListener {
-            showEditModal(item)
+            val dialog = context?.let { it1 ->
+                CustomModal(
+                    it1,
+                    daySection ?: "",
+                    travelListId,
+                    userId
+                )
+            }
+            dialog?.setScheduleData(item) // 수정할 일정 데이터 전달
+            dialog?.setOnDismissListener {
+                // 모달이 닫힐 때 데이터 업데이트
+                dialog.getUpdatedScheduleData()?.let { it1 -> updateDataItem(it1) }
+            }
+            dialog?.show()
         }
 
         holder.deleteBtn.setOnClickListener {
@@ -105,11 +118,11 @@ class ScheduleItemAdapter(private val context: Context?,
         return (timeSlotHeightPixels * duration).toInt()
     }
 
-    private fun showEditModal(item: ScheduleData) {
-        context?.let { ctx ->
-            val dialog = CustomModal(ctx, daySection, travelListId, userId)
-            dialog.setScheduleData(item) // 해당 아이템의 정보를 모달창에 전달
-            dialog.show()
+    fun updateDataItem(updatedItem: ScheduleData) {
+        val index = dataSet.indexOfFirst { it.scheduleTimeId == updatedItem.scheduleTimeId }
+        if (index != -1) {
+            dataSet[index] = updatedItem
+            notifyItemChanged(index)
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.traveltaleproject.schedule
 
 import android.app.Dialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -17,12 +18,13 @@ import java.util.UUID
 
 class CustomModal(
     context: Context,
-    private val userId: String,
+    private val daySection: String,
     private val travelListId: String,
-    private val daySection: String
+    private var userId: String
 ) : Dialog(context) {
     private lateinit var binding: ActivityScheduleModalBinding
     private var scheduleData: ScheduleData? = null
+    private val sharedPreferences = context.getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
     private var selectedStartTime: Long = 0
     private var selectedEndTime: Long = 0
     private var scheduleText: String = ""
@@ -44,6 +46,10 @@ class CustomModal(
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setCanceledOnTouchOutside(true)
         setCancelable(true)
+        showToast("$daySection", context)
+
+        // SharedPreferences 초기화
+        userId = getSessionId()
 
         val startTimeSpinner = binding.startTimeSpinner
         val endTimeSpinner = binding.endTimeSpinner
@@ -100,26 +106,26 @@ class CustomModal(
             scheduleText = scheduleTxtEdit.text.toString()
 
             if (scheduleText.isNotBlank() && selectedStartTime != selectedEndTime) {
-                if (scheduleData != null && scheduleData?.scheduleTimeId == scheduleTimeId) {
-                    // scheduleData가 null이 아니고 scheduleTimeId가 일치하면 수정 모드입니다.
-                    // 기존의 일정을 업데이트합니다.
-                    // 수정 모드인지 새로운 추가 모드인지 구분하기 위한 플래그
-
-
+                if (scheduleData != null) {
+                    // scheduleData가 null이 아니고 scheduleTimeId가 일치하면 수정 모드
                     showToast("일정 업데이트 성공", context)
                     scheduleData?.startTime = selectedStartTime
                     scheduleData?.endTime = selectedEndTime
                     scheduleData?.scheduleText = scheduleText
 
-                    val updatedScheduleData = ScheduleData(selectedStartTime, selectedEndTime, scheduleText, scheduleTimeId)
-                    updateScheduleData(updatedScheduleData)
-                    scheduleDataListener?.onScheduleDataReceived(scheduleData!!)
+                    // 기존 데이터를 업데이트하는 함수 호출
+                    updateScheduleData(scheduleData!!)
+                    scheduleDataListener?.onScheduleDataUpdated(scheduleData!!, scheduleTimeId)
                 } else {
                     // 일정 데이터를 생성
                     val scheduleData = createScheduleData(selectedStartTime, selectedEndTime, scheduleText)
 
+                    // saveScheduleDataToDatabase 함수 호출하여 데이터베이스에 저장
+                    saveScheduleDataToDatabase(scheduleData)
+
                     // 인터페이스를 통해 일정 데이터를 fragment로 전달
-                    scheduleDataListener?.onScheduleDataReceived(scheduleData)
+                    // 수정 버튼을 눌렀을 때 프래그먼트로 데이터 전달하여 fetchScheduleList(daySection) 호출
+                    scheduleDataListener?.onScheduleDataReceived(scheduleData!!)
 
                     // 다이얼로그 닫기
                     dismiss()
@@ -141,17 +147,17 @@ class CustomModal(
     }
 
     private fun createScheduleData(startTime: Long, endTime: Long, scheduleText: String): ScheduleData {
-        val scheduleTimeId = UUID.randomUUID().toString()
+        scheduleTimeId = UUID.randomUUID().toString()
         this.scheduleTimeId = scheduleTimeId // 클래스 내부의 scheduleTimeId 업데이트
         return ScheduleData(startTime, endTime, scheduleText, scheduleTimeId)
     }
 
     private fun saveScheduleDataToDatabase(scheduleData: ScheduleData) {
         val databaseReference = FirebaseDatabase.getInstance().reference
-            .child("TravelList").child(userId).child(travelListId)
+            .child("TravelList").child(userId).child(travelListId).child("schedule")
 
-        // 해당 daysection 노드에 데이터 저장
-        val scheduleRef = databaseReference.child("schedule").child(daySection).child(scheduleData.scheduleTimeId)
+        // 해당 daysection 노드에 새로운 고유한 키로 데이터 추가
+        val scheduleRef = databaseReference.child(daySection).child(scheduleTimeId).push()
 
         scheduleRef.setValue(scheduleData)
             .addOnSuccessListener {
@@ -164,18 +170,23 @@ class CustomModal(
 
     private fun updateScheduleData(scheduleDataToUpdate: ScheduleData) {
         val databaseReference = FirebaseDatabase.getInstance().reference
-            .child("TravelList").child(userId).child(travelListId)
+            .child("TravelList").child(userId).child(travelListId).child("schedule")
 
-        // 해당 daysection 노드에 데이터 저장
-        val scheduleRef = databaseReference.child("schedule").child(daySection).child(scheduleTimeId)
+        // 해당 daysection 노드에 기존 데이터 업데이트
+        val scheduleRef = databaseReference.child(daySection).child(scheduleDataToUpdate.scheduleTimeId)
 
-        scheduleRef.updateChildren(scheduleDataToUpdate.toMap())
+        scheduleRef.setValue(scheduleDataToUpdate)
             .addOnSuccessListener {
                 Log.d("dbReal", "업데이트 성공")
             }
             .addOnFailureListener {
                 Log.d("dbReal", "업데이트 실패")
             }
+    }
+
+    // 수정된 일정 데이터를 가져오는 메서드 추가
+    fun getUpdatedScheduleData(): ScheduleData? {
+        return scheduleData
     }
 
     private fun showToast(message: String, context: Context) {
@@ -185,6 +196,7 @@ class CustomModal(
     // 저장 버튼 클릭 리스너 인터페이스
     interface ScheduleDataListener {
         fun onScheduleDataReceived(scheduleData: ScheduleData)
+        fun onScheduleDataUpdated(scheduleData: ScheduleData, scheduleTimeId: String)
     }
 
     private var scheduleDataListener: ScheduleDataListener? = null
@@ -192,6 +204,10 @@ class CustomModal(
     fun setScheduleDataListener(listener: ScheduleDataListener) {
         scheduleDataListener = listener
     }
+    private fun getSessionId(): String {
+        return sharedPreferences.getString("user_id", "") ?: ""
+    }
+
 
 }
 

@@ -24,7 +24,9 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
     private var dataSet = mutableListOf<ScheduleData>()
     private lateinit var travelListId: String
     private lateinit var userId: String
-    private lateinit var scheduleTimeId: String
+
+    // 수정된 데이터를 전달하기 위한 리스너
+    private var scheduleDataListener: CustomModal.ScheduleDataListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,39 +46,49 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
 
-        // 데이터셋 초기화
-        dataSet = mutableListOf()
-
         // 어댑터 초기화
-        adapter = daySection?.let { ScheduleItemAdapter(requireContext(), dataSet, userId, travelListId, it ) }!!
+        adapter = ScheduleItemAdapter(requireContext(), dataSet, userId, travelListId, daySection ?: "")
         recyclerView.adapter = adapter
 
         // 저장 버튼 클릭 이벤트 설정
         scheduleAddButton.setOnClickListener {
             // 다이얼로그 보여주기
-            val dialog =
-                daySection?.let { daySection -> CustomModal(requireContext(), daySection, travelListId, userId) }
+            val dialog = CustomModal(requireContext(), daySection ?: "", travelListId, userId)
+            dialog.show()
 
-            dialog?.show()
-
-            dialog?.setScheduleDataListener(object : CustomModal.ScheduleDataListener {
-                override fun onScheduleDataReceived(scheduleData: ScheduleData) {
-                    // 스케줄 데이터를 받아와서 처리
-                    // 예를 들어, 데이터셋에 추가하고 어댑터에 알림
-                    dataSet.add(scheduleData)
-
-                    // 리사이클러뷰의 스크롤 위치를 마지막으로 이동
-                    recyclerView.scrollToPosition(dataSet.size - 1)
-                }
-            })
+            // 모달창에서 받은 데이터를 처리하기 위해 프래그먼트 자체를 리스너로 설정
+            dialog.setScheduleDataListener(this@ScheduleFragment)
         }
 
+        // 스케줄 데이터 불러오기
         fetchScheduleList(daySection)
+
+        // 수정된 데이터를 전달하기 위한 리스너 설정
+        scheduleDataListener = object : CustomModal.ScheduleDataListener {
+            override fun onScheduleDataReceived(scheduleData: ScheduleData) {
+                // 받은 일정 데이터를 dataSet에 추가하고 어댑터에 알림
+                dataSet.add(scheduleData)
+                adapter.notifyItemInserted(dataSet.size - 1)
+            }
+
+            override fun onScheduleDataUpdated(scheduleData: ScheduleData, scheduleTimeId: String) {
+                // 받은 일정 데이터를 dataSet에서 찾아 업데이트하고 어댑터에 알림
+                val index = dataSet.indexOfFirst { it.scheduleTimeId == scheduleTimeId }
+                Toast.makeText(context, scheduleTimeId, Toast.LENGTH_SHORT).show()
+                if (index != -1) {
+                    dataSet[index] = scheduleData
+                    adapter.updateDataItem(scheduleData)
+
+                    // 프래그먼트로 수정된 데이터와 함께 콜백 호출
+                    scheduleDataListener?.onScheduleDataUpdated(scheduleData, scheduleTimeId)
+                }
+            }
+        }
 
         return view
     }
 
-    // 수정된 fetchScheduleList 함수
+    // 스케줄 데이터 불러오는 메서드 수정
     private fun fetchScheduleList(daySection: String?) {
         daySection?.let {
             FirebaseDatabase.getInstance().reference
@@ -92,7 +104,6 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
                         val endTime = childSnapshot.child("endTime").getValue(Long::class.java)
                         val scheduleText = childSnapshot.child("scheduleText").getValue(String::class.java)
 
-                        showToast("$startTime")
                         // startTime이 null이 아닌 경우에만 처리
                         startTime?.let {
                             // childSnapshot의 키를 scheduleTimeId로 사용
@@ -121,14 +132,25 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
         })
     }
 
-
-    private fun showToast(message: String?) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    // 모달 창에서 새로운 일정 데이터를 받았을 때 호출되는 콜백 함수
+    override fun onScheduleDataReceived(scheduleData: ScheduleData) {
+        // 받은 일정 데이터를 dataSet에 추가하고 어댑터에 알림
+        dataSet.add(scheduleData)
+        adapter.notifyItemInserted(dataSet.size - 1)
     }
 
-    override fun onScheduleDataReceived(scheduleData: ScheduleData) {
-        // 새로운 데이터를 데이터셋에 추가하고 어댑터에 알림
-        dataSet.add(scheduleData)
+    // 모달 창에서 수정된 일정 데이터를 받았을 때 호출되는 콜백 함수
+    override fun onScheduleDataUpdated(scheduleData: ScheduleData, scheduleTimeId: String) {
+        // 받은 일정 데이터를 dataSet에서 찾아 업데이트하고 어댑터에 알림
+        val index = dataSet.indexOfFirst { it.scheduleTimeId == scheduleTimeId }
+        Toast.makeText(context, scheduleTimeId, Toast.LENGTH_SHORT).show()
+        if (index != -1) {
+            dataSet[index] = scheduleData
+            adapter.notifyItemChanged(index)
+
+            // 프래그먼트로 수정된 데이터와 함께 콜백 호출
+            scheduleDataListener?.onScheduleDataUpdated(scheduleData, scheduleTimeId)
+        }
     }
 
     private fun getSessionId(): String {
@@ -150,3 +172,4 @@ class ScheduleFragment : Fragment(), CustomModal.ScheduleDataListener {
         }
     }
 }
+

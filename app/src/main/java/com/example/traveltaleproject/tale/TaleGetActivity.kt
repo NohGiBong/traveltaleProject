@@ -6,11 +6,14 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.traveltaleproject.BottomNavigationHelper
 import com.example.traveltaleproject.GetActivity
 import com.example.traveltaleproject.R
 import com.example.traveltaleproject.databinding.ActivityTaleGetBinding
 import com.example.traveltaleproject.models.TaleData
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -26,69 +29,104 @@ class TaleGetActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userId: String
+    private lateinit var travelListId: String
+    private var taleData: TaleData? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaleGetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 데이터 초기화
-        val travelListId = intent.getStringExtra("travelListId") ?: ""
-        val taleData = intent.getParcelableExtra<TaleData>("taleData")
+        // 주요 기능 호출
+        initializeData()
+        fetchTravelListData()
+        setupMenuButton()
+        setupBottomNavigation()
+    }
+
+    // 데이터 초기화
+    private fun initializeData() {
         sharedPreferences = getSharedPreferences("MyInfo", Context.MODE_PRIVATE)
         userId = getSessionId()
-        binding.taleGet.text = taleData?.text?: ""
+        travelListId = intent.getStringExtra("travelListId") ?: ""
+        taleData = intent.getParcelableExtra("taleData")
+        binding.taleGet.text = taleData?.text ?: ""
         databaseReference = FirebaseDatabase.getInstance().reference.child("TravelList").child(userId).child(travelListId)
+    }
 
-        // 데이터 가져오기
-        fetchTravelListData()
-
-        // 삭제 후 write로 돌아가는 메서드
-        fun goToWriteActivity() {
-            val intent = Intent(this, GetActivity::class.java)
-            intent.putExtra("travelListId", travelListId)
-            startActivity(intent)
-            finish()
-        }
-
-        // 메뉴 버튼 구현
-        with(binding) {
-            menuBtn.setOnClickListener {
-                val popupMenu = PopupMenu(this@TaleGetActivity, it)
-                menuInflater.inflate(R.menu.tale_menu, popupMenu.menu)
-                // 콜백 메서드 구현
-                popupMenu.setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.action_edit -> {
-                            val intent = Intent(this@TaleGetActivity, TaleWriteActivity::class.java)
-
-                            if (taleData != null) {
-                                // 수정할 데이터의 고유 ID 전달
-                                intent.putExtra("talesid", taleData.talesid)
-                                intent.putExtra("travelListId", travelListId)
-                            }
-                            startActivity(intent)
-                            finish()
-                            Toast.makeText(this@TaleGetActivity, "수정 클릭", Toast.LENGTH_SHORT).show()
-                        }
-                        R.id.action_delete -> {
-                            // 데이터베이스에 저장된 talesid를 기준으로 현재 불러온 게시물 삭제
-                            databaseReference.child("tales").child(taleData?.talesid.toString()).removeValue()
-                                .addOnSuccessListener {
-                                    Toast.makeText(this@TaleGetActivity, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                                    goToWriteActivity() // 삭제 후 write로 돌아가는 메서드 호출
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(this@TaleGetActivity, "게시물 삭제 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                                }
-                        }
+    // 메뉴 버튼
+    private fun setupMenuButton() {
+        binding.menuBtn.setOnClickListener {
+            val popupMenu = PopupMenu(this@TaleGetActivity, it)
+            menuInflater.inflate(R.menu.tale_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit -> {
+                        navigateToTaleWriteActivity()
+                        true
                     }
-                    false
+                    R.id.action_delete -> {
+                        showDeleteDialog()
+                        true
+                    }
+                    else -> false
                 }
-                popupMenu.show()
             }
+            popupMenu.show()
         }
     }
 
+    // 수정 버튼 클릭 시 기존 데이터 전달 후 글쓰기 페이지로 이동
+    private fun navigateToTaleWriteActivity() {
+        val intent = Intent(this, TaleWriteActivity::class.java)
+        intent.putExtra("talesid", taleData?.talesid)
+        intent.putExtra("travelListId", travelListId)
+        startActivity(intent)
+        finish()
+    }
+
+    // 삭제 버튼 클릭 시 경고창 호출
+    private fun showDeleteDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("정말로 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ -> deleteTale() }
+            .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+
+        val dialog = builder.create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(resources.getColor(R.color.black))
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(resources.getColor(R.color.black))
+        }
+
+        dialog.show()
+    }
+
+    // 삭제 선택 시 삭제
+    private fun deleteTale() {
+        taleData?.talesid?.let { talesId ->
+            databaseReference.child("tales").child(talesId).removeValue()
+                .addOnSuccessListener {
+                    Toast.makeText(this, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    navigateToGetActivity()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "게시물 삭제 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    // 삭제 후 상위 페이지로 이동
+    private fun navigateToGetActivity() {
+        val intent = Intent(this, GetActivity::class.java)
+        intent.putExtra("travelListId", travelListId)
+        startActivity(intent)
+        finish()
+    }
+
+    // // 상위 게시물 데이터 불러오기 및 UI 업데이트
     private fun fetchTravelListData() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -98,26 +136,28 @@ class TaleGetActivity : AppCompatActivity() {
                 val address = snapshot.child("address").value.toString()
                 val travelImage = snapshot.child("travelImage").value.toString()
 
-                // 가져온 데이터를 바인딩에 설정
                 binding.taleGetTitle.setText(title)
                 val sdf = SimpleDateFormat("dd.MMM.yyyy", Locale.ENGLISH)
-                val formattedStartDate = sdf.format(Date(startDate))
-                val formattedEndDate = sdf.format(Date(endDate))
-
-                binding.startDateTxt.text = formattedStartDate
-                binding.endDateTxt.text = formattedEndDate
+                binding.startDateTxt.text = sdf.format(Date(startDate))
+                binding.endDateTxt.text = sdf.format(Date(endDate))
                 binding.mapTxt.setText(address)
                 Picasso.get().load(travelImage).into(binding.mainImg)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // 에러 처리
+                Toast.makeText(this@TaleGetActivity, "데이터 로드 실패", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // 사용자 정보 받아오는 펑션
+    // 하단 바 네비게이션
+    private fun setupBottomNavigation() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        BottomNavigationHelper(this, this).setupBottomNavigationListener(bottomNavigationView)
+    }
+
+    // 사용자 정보 획득
     private fun getSessionId(): String {
-        return sharedPreferences.getString("user_id", "").toString()
+        return sharedPreferences.getString("user_id", "") ?: ""
     }
 }

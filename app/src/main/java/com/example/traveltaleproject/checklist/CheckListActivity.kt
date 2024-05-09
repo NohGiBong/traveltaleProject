@@ -76,7 +76,8 @@ class CheckListActivity : AppCompatActivity() {
     // CheckList 데이터 뿌리기
     private fun fetchCheckListData() {
         val database = Firebase.database
-        val checklistRef = database.getReference("check").child(userId).child(travelListId)
+       // val checklistRef = database.getReference("check").child(userId).child(travelListId)
+        val checklistRef = database.getReference("TravelList").child(userId).child(travelListId ?: "").child("check")
 
         checklistRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
